@@ -441,7 +441,7 @@ GameObject:
   - component: {fileID: 7015620641451525320}
   - component: {fileID: 6742343431844405200}
   - component: {fileID: 8860453004062988034}
-  - component: {fileID: 5357804935860026682}
+  - component: {fileID: 1106345861056777856}
   m_Layer: 0
   m_Name: Coin5 1
   m_TagString: COIN5
@@ -512,7 +512,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5357804935860026682
+--- !u!114 &1106345861056777856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -521,7 +521,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6661570372051903273}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77a76b564ad75a148908cb2c5a7afbde, type: 3}
+  m_Script: {fileID: 11500000, guid: 475c92b6743dec24fbec31708c3c3420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   coinFX: {fileID: 0}

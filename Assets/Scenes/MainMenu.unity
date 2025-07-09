@@ -292,7 +292,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 296985400}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MusicController, Assembly-CSharp
         m_MethodName: OnSoundButtonClick
         m_Mode: 1
@@ -661,7 +661,6 @@ GameObject:
   m_Component:
   - component: {fileID: 296985399}
   - component: {fileID: 296985401}
-  - component: {fileID: 296985400}
   m_Layer: 0
   m_Name: Audio
   m_TagString: Untagged
@@ -685,29 +684,6 @@ Transform:
   - {fileID: 1480728154}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &296985400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 296985397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: faae296f2b27a0349bd82ccdb950f673, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxVolume: 0.35
-  minVolume: 0.01
-  volumeChangeSpeed: 3
-  defaultMusic: {fileID: 8300000, guid: b1f23be4755621b42a10105128923265, type: 3}
-  additionalMusic: []
-  soundButtonImage: {fileID: 133674608}
-  soundOnSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  soundOffSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  newClip: {fileID: 8300000, guid: 2be733dbfa1f69242a30ff46e99732e8, type: 3}
-  newClip1: {fileID: 8300000, guid: fdc8729604c8dd54cae6d067055a0506, type: 3}
-  newClip2: {fileID: 8300000, guid: ec6a3223e5aff96469c384a8e342d485, type: 3}
 --- !u!82 &296985401
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1262,7 +1238,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 993473092}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: StartGame
         m_Mode: 1
@@ -1395,7 +1371,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 993473092}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: StartRecord
         m_Mode: 1
@@ -1579,7 +1555,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 993473092}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: StartMusic
         m_Mode: 1
@@ -1638,7 +1614,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 591742848}
-  - component: {fileID: 591742847}
+  - component: {fileID: 591742850}
   - component: {fileID: 591742849}
   m_Layer: 0
   m_Name: GameManager
@@ -1647,20 +1623,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &591742847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 591742846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6da9b27ca80882747876c612f55d42dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CoinTexts: {fileID: 1710956533}
-  Coin: 0
 --- !u!4 &591742848
 Transform:
   m_ObjectHideFlags: 0
@@ -1685,10 +1647,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 591742846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d5643ebfcf57f84bb5f4356a9cfcd30, type: 3}
+  m_Script: {fileID: 11500000, guid: f1eda8b8320e23c4294d6eb69e706b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _MainScoreText: {fileID: 1602100439}
+  highScores: []
+--- !u!114 &591742850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591742846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f48593d3d08ab4da607a92ffe49802, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CoinTexts: {fileID: 0}
+  Coin: 0
 --- !u!1001 &612865245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2334,10 +2310,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 993473089}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f3cbe0aef7b1a041882f8e4f9e86836, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b1bf263b7ed9604f93770f74e20f3e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeout: {fileID: 261344614}
+  fadeout: {fileID: 0}
 --- !u!1001 &1045060686
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4438,7 +4414,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 993473092}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: StartShop
         m_Mode: 1

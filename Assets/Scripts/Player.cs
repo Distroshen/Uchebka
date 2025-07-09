@@ -14,6 +14,10 @@ public class Player : MonoBehaviour
     private bool isTouching = false;
     private float targetXPosition;
 
+    [SerializeField] GameObject mainCam;
+    [SerializeField] GameObject Fadeout;
+    [SerializeField] GameObject Player1;
+    [SerializeField] GameObject LosePanel;
     public bool Life = true;
 
     void Start()
@@ -108,5 +112,31 @@ public class Player : MonoBehaviour
             Speed += 1;
             StartCoroutine(SS());
         }
+    }
+    public void BustU()
+    {
+        Speed = Speed + 5;
+        Speedz = Speedz + 5;
+    }
+    public void BustU2()
+    {
+        Speed = Speed - 5;
+        Speedz = Speedz - 5;
+    }
+    public void Dead1()
+    {
+        FindAnyObjectByType<Scor>().OnPlayerDeath();
+        Life = false;
+        Speed = 0;
+        MaxSpeed = 0;
+        Speedz = 0;
+        Player1.GetComponent<Animator>().Play("Death1");
+        mainCam.GetComponent<Animator>().Play("AC");
+        Fadeout.SetActive(true);
+        Invoke("LP", 3f);
+    }
+    void LP()
+    {
+        LosePanel.SetActive(true);
     }
 }

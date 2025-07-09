@@ -233,10 +233,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 9298283}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a073def226fc64d4a967d2a9028ac6f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 9514e991c52cb4f4a85b16c6bedcb8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: {fileID: 1190638737}
+  _normalTilePrefab: {fileID: 0}
+  _specialTilePrefab: {fileID: 0}
+  _maxCount: 5
+  _tileHolder: {fileID: 0}
+  _startPoint: {fileID: 0}
+  _coin5: {fileID: 0}
+  _coin: {fileID: 0}
+  _bomb: {fileID: 0}
+  _startSpawnBomb: 3
+  _specialTileChance: 20
 --- !u!1 &46828588
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,10 +364,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 46828588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a073def226fc64d4a967d2a9028ac6f7, type: 3}
+  m_Script: {fileID: 11500000, guid: dfe3fba7c27bd7847b31bbb49463613e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: {fileID: 1190638737}
+  Speed: 3
+  MaxSpeed: 14
+  Speedz: 6
+  RightLimit: 1.75
+  LeftLimit: -1.75
+  isImmortal: 0
+  mainCam: {fileID: 0}
+  Fadeout: {fileID: 0}
+  Player1: {fileID: 0}
+  LosePanel: {fileID: 0}
+  Life: 1
 --- !u!1 &52768207
 GameObject:
   m_ObjectHideFlags: 0
@@ -1721,7 +1740,7 @@ GameObject:
   - component: {fileID: 725767616}
   - component: {fileID: 725767615}
   - component: {fileID: 725767614}
-  - component: {fileID: 725767613}
+  - component: {fileID: 725767618}
   m_Layer: 0
   m_Name: TileGenerator 2(2)
   m_TagString: Untagged
@@ -1729,19 +1748,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &725767613
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 725767612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a073def226fc64d4a967d2a9028ac6f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: {fileID: 1190638737}
 --- !u!54 &725767614
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1827,6 +1833,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &725767618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725767612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9514e991c52cb4f4a85b16c6bedcb8a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _normalTilePrefab: {fileID: 0}
+  _specialTilePrefab: {fileID: 0}
+  _maxCount: 5
+  _tileHolder: {fileID: 0}
+  _startPoint: {fileID: 0}
+  _coin5: {fileID: 0}
+  _coin: {fileID: 0}
+  _bomb: {fileID: 0}
+  _startSpawnBomb: 3
+  _specialTileChance: 20
 --- !u!1 &729562636
 GameObject:
   m_ObjectHideFlags: 0
@@ -1836,7 +1864,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 729562638}
-  - component: {fileID: 729562637}
+  - component: {fileID: 729562640}
   - component: {fileID: 729562639}
   m_Layer: 0
   m_Name: GameManager
@@ -1845,20 +1873,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &729562637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 729562636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6da9b27ca80882747876c612f55d42dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CoinTexts: {fileID: 712360711}
-  Coin: 0
 --- !u!4 &729562638
 Transform:
   m_ObjectHideFlags: 0
@@ -1883,12 +1897,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 729562636}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6628761e9b1b49d41ab9e394a6b38d64, type: 3}
+  m_Script: {fileID: 11500000, guid: f1eda8b8320e23c4294d6eb69e706b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _titleText: {fileID: 1147060967}
-  _childTitle: "\u0414\u0435\u0442\u0441\u043A\u0438\u0439"
-  _manTitle: "\u041C\u0443\u0436\u0441\u043A\u043E\u0439"
+  highScores: []
+--- !u!114 &729562640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729562636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f48593d3d08ab4da607a92ffe49802, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CoinTexts: {fileID: 0}
+  Coin: 0
 --- !u!1001 &762546673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3123,47 +3149,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: -0.12, z: -0.19}
---- !u!114 &1190638737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1190638732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c6989f309e0f214eadbb4c72ed2facd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Speed: 3
-  MaxSpeed: 14
-  Speedz: 6
-  RightLimit: 2.25
-  LeftLimit: -2.25
-  isImmortal: 0
-  mainCam: {fileID: 330585543}
-  Fadeout: {fileID: 2057515600}
-  Player1: {fileID: 1813152105}
-  LosePanel: {fileID: 1294744770}
-  Life: 1
---- !u!114 &1190638738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1190638732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1ee831e5346f7d488c4ee91e82601f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scinIndex: 0
-  scins:
-  - {fileID: 1813152105}
-  - {fileID: 1975596651}
-  - {fileID: 164969797}
-  - {fileID: 1155580747}
 --- !u!1 &1294744770
 GameObject:
   m_ObjectHideFlags: 0
@@ -3528,12 +3513,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1190638736}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1190638737}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1190638738}
   m_SourcePrefab: {fileID: 100100000, guid: 73d8600727323314fb3d383942f42f10, type: 3}
 --- !u!1 &1537637834
 GameObject:
@@ -3735,7 +3714,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1583299706}
-  - component: {fileID: 1583299705}
+  - component: {fileID: 1583299707}
   m_Layer: 0
   m_Name: ScorManager
   m_TagString: Untagged
@@ -3743,23 +3722,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1583299705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1583299704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa55c325d3e10dc46adf94270c713374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _scoreMultiplier: 2
-  _currentScoreText: {fileID: 1537637836}
-  _highScoreText: {fileID: 1121271933}
-  _player: {fileID: 1190638733}
-  player: {fileID: 1190638737}
 --- !u!4 &1583299706
 Transform:
   m_ObjectHideFlags: 0
@@ -3775,6 +3737,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1583299707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583299704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c6a9d27ea1e954fa018d6f6fa954a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scoreMultiplier: 2
+  _currentScoreText: {fileID: 0}
+  _highScoreText: {fileID: 0}
+  _player: {fileID: 0}
+  player: {fileID: 0}
 --- !u!4 &1606323877
 Transform:
   m_ObjectHideFlags: 0
@@ -3939,7 +3918,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (2)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5057021814322733160, guid: 35a2bf9ab29b0da4cb62483b0c4e836b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3956,7 +3936,7 @@ GameObject:
   - component: {fileID: 1761386986}
   - component: {fileID: 1761386985}
   - component: {fileID: 1761386984}
-  - component: {fileID: 1761386983}
+  - component: {fileID: 1761386988}
   m_Layer: 0
   m_Name: Bust
   m_TagString: Untagged
@@ -3964,19 +3944,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1761386983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761386982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b23da26347a0644b627c4394109b54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BustFX: {fileID: 172021384}
 --- !u!65 &1761386984
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4066,6 +4033,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1761386988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761386982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e046510d78a9db74f81e31aea8571882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BustFX: {fileID: 0}
 --- !u!1 &1813152105 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
@@ -4219,11 +4199,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1938950369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58e9f704345fd1144be94f6b919d5789, type: 3}
+  m_Script: {fileID: 11500000, guid: 8df1a0588fcd1dc408b2f1083d3dd06b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BustBFX: {fileID: 172021384}
-  BombFX: {fileID: 1606323878}
+  BustBFX: {fileID: 0}
+  BombFX: {fileID: 0}
   BMesh: {fileID: 0}
 --- !u!1001 &1975596649
 PrefabInstance:
@@ -4507,7 +4487,7 @@ GameObject:
   - component: {fileID: 2060943395}
   - component: {fileID: 2060943394}
   - component: {fileID: 2060943393}
-  - component: {fileID: 2060943392}
+  - component: {fileID: 2060943397}
   m_Layer: 0
   m_Name: TileGenerator1 (1)
   m_TagString: Untagged
@@ -4515,19 +4495,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2060943392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060943391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a073def226fc64d4a967d2a9028ac6f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: {fileID: 1190638737}
 --- !u!54 &2060943393
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4613,6 +4580,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2060943397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060943391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9514e991c52cb4f4a85b16c6bedcb8a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _normalTilePrefab: {fileID: 0}
+  _specialTilePrefab: {fileID: 0}
+  _maxCount: 5
+  _tileHolder: {fileID: 0}
+  _startPoint: {fileID: 0}
+  _coin5: {fileID: 0}
+  _coin: {fileID: 0}
+  _bomb: {fileID: 0}
+  _startSpawnBomb: 3
+  _specialTileChance: 20
 --- !u!1 &2111664368
 GameObject:
   m_ObjectHideFlags: 0

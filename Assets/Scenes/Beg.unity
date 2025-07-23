@@ -151,16 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b353ddefcaad44f820eff4869e37be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _normalTilePrefab: {fileID: 0}
-  _specialTilePrefab: {fileID: 0}
-  _maxCount: 20
-  _tileHolder: {fileID: 2111664369}
-  _startPoint: {fileID: 0}
-  _coin5: {fileID: 0}
-  _coin: {fileID: 0}
-  _bomb: {fileID: 0}
-  _startSpawnBomb: 0
-  _specialTileChance: 20
 --- !u!4 &9298285
 Transform:
   m_ObjectHideFlags: 0
@@ -183,10 +173,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9298283}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -367,17 +357,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe3fba7c27bd7847b31bbb49463613e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 3
-  MaxSpeed: 14
-  Speedz: 6
-  RightLimit: 1.75
-  LeftLimit: -1.75
-  isImmortal: 0
-  mainCam: {fileID: 0}
-  Fadeout: {fileID: 0}
-  Player1: {fileID: 0}
-  LosePanel: {fileID: 0}
-  Life: 1
 --- !u!1 &52768207
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,44 +506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34f36451b093ee4c83ad4aa5459d2ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textLComponent: {fileID: 0}
-  infoYG: {fileID: 11400000, guid: 162644796a8b0d044bce3d6fda0641e3, type: 2}
-  text: 
-  ru: "\u041F\u0435\u0440\u0435\u0437\u0430\u0443\u043F\u0441\u0442\u0438\u0442\u044C"
-  en: Reloading
-  tr: "Yeniden y\xFCkleme"
-  az: 
-  be: 
-  he: 
-  hy: 
-  ka: 
-  et: 
-  fr: 
-  kk: 
-  ky: 
-  lt: 
-  lv: 
-  ro: 
-  tg: 
-  tk: 
-  uk: 
-  uz: 
-  es: 
-  pt: 
-  ar: 
-  id: 
-  ja: 
-  it: 
-  de: 
-  hi: 
-  changeOnlyFont: 0
-  fontNumber: 0
-  uniqueFont: {fileID: 0}
-  additionalText: {fileID: 0}
-  textHeight: 20
-  processTranslateLabel: 0/19 completed
-  componentTextField: 1
-  countLang: 0
 --- !u!1 &164969797 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
@@ -1482,44 +1423,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34f36451b093ee4c83ad4aa5459d2ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textLComponent: {fileID: 0}
-  infoYG: {fileID: 11400000, guid: 162644796a8b0d044bce3d6fda0641e3, type: 2}
-  text: 
-  ru: "\u0412 \u043C\u0435\u043D\u044E"
-  en: In the menu
-  tr: "Men\xFCde"
-  az: 
-  be: 
-  he: 
-  hy: 
-  ka: 
-  et: 
-  fr: 
-  kk: 
-  ky: 
-  lt: 
-  lv: 
-  ro: 
-  tg: 
-  tk: 
-  uk: 
-  uz: 
-  es: 
-  pt: 
-  ar: 
-  id: 
-  ja: 
-  it: 
-  de: 
-  hi: 
-  changeOnlyFont: 0
-  fontNumber: 0
-  uniqueFont: {fileID: 0}
-  additionalText: {fileID: 0}
-  textHeight: 20
-  processTranslateLabel: 0/19 completed
-  componentTextField: 1
-  countLang: 0
 --- !u!1 &681536595
 GameObject:
   m_ObjectHideFlags: 0
@@ -1690,44 +1593,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34f36451b093ee4c83ad4aa5459d2ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textLComponent: {fileID: 0}
-  infoYG: {fileID: 11400000, guid: 162644796a8b0d044bce3d6fda0641e3, type: 2}
-  text: 
-  ru: 0
-  en: 0
-  tr: 0
-  az: 
-  be: 
-  he: 
-  hy: 
-  ka: 
-  et: 
-  fr: 
-  kk: 
-  ky: 
-  lt: 
-  lv: 
-  ro: 
-  tg: 
-  tk: 
-  uk: 
-  uz: 
-  es: 
-  pt: 
-  ar: 
-  id: 
-  ja: 
-  it: 
-  de: 
-  hi: 
-  changeOnlyFont: 0
-  fontNumber: 0
-  uniqueFont: {fileID: 0}
-  additionalText: {fileID: 0}
-  textHeight: 20
-  processTranslateLabel: 0/19 completed
-  componentTextField: 1
-  countLang: 0
 --- !u!1 &725767612
 GameObject:
   m_ObjectHideFlags: 0
@@ -1755,10 +1620,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 725767612}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1808,16 +1673,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b353ddefcaad44f820eff4869e37be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _normalTilePrefab: {fileID: 0}
-  _specialTilePrefab: {fileID: 0}
-  _maxCount: 20
-  _tileHolder: {fileID: 2111664369}
-  _startPoint: {fileID: 0}
-  _coin5: {fileID: 0}
-  _coin: {fileID: 0}
-  _bomb: {fileID: 0}
-  _startSpawnBomb: 0
-  _specialTileChance: 20
 --- !u!4 &725767617
 Transform:
   m_ObjectHideFlags: 0
@@ -2776,44 +2631,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34f36451b093ee4c83ad4aa5459d2ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textLComponent: {fileID: 0}
-  infoYG: {fileID: 11400000, guid: 162644796a8b0d044bce3d6fda0641e3, type: 2}
-  text: 
-  ru: 0
-  en: 0
-  tr: 0
-  az: 
-  be: 
-  he: 
-  hy: 
-  ka: 
-  et: 
-  fr: 
-  kk: 
-  ky: 
-  lt: 
-  lv: 
-  ro: 
-  tg: 
-  tk: 
-  uk: 
-  uz: 
-  es: 
-  pt: 
-  ar: 
-  id: 
-  ja: 
-  it: 
-  de: 
-  hi: 
-  changeOnlyFont: 0
-  fontNumber: 0
-  uniqueFont: {fileID: 0}
-  additionalText: {fileID: 0}
-  textHeight: 20
-  processTranslateLabel: 0/19 completed
-  componentTextField: 1
-  countLang: 0
 --- !u!1 &1136988229
 GameObject:
   m_ObjectHideFlags: 0
@@ -3149,6 +2966,47 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: -0.12, z: -0.19}
+--- !u!114 &1190638737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190638732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a26d90cb38409d648b8f0256cca95c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scinIndex: 0
+  scins:
+  - {fileID: 1813152105}
+  - {fileID: 1975596651}
+  - {fileID: 164969797}
+  - {fileID: 1155580747}
+--- !u!114 &1190638738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190638732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10a804ac27e284540a5ad9ce316735cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 3
+  MaxSpeed: 14
+  Speedz: 6
+  RightLimit: 1.75
+  LeftLimit: -1.75
+  isImmortal: 0
+  mainCam: {fileID: 330585543}
+  Fadeout: {fileID: 2057515600}
+  Player1: {fileID: 1813152105}
+  LosePanel: {fileID: 1294744770}
+  Life: 1
 --- !u!1 &1294744770
 GameObject:
   m_ObjectHideFlags: 0
@@ -3496,10 +3354,10 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 73d8600727323314fb3d383942f42f10, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1975596650}
+      addedObject: {fileID: 1813152115}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 73d8600727323314fb3d383942f42f10, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1813152115}
+      addedObject: {fileID: 1975596650}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 73d8600727323314fb3d383942f42f10, type: 3}
       insertIndex: -1
       addedObject: {fileID: 164969798}
@@ -3512,7 +3370,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1190638738}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1190638736}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1190638737}
   m_SourcePrefab: {fileID: 100100000, guid: 73d8600727323314fb3d383942f42f10, type: 3}
 --- !u!1 &1537637834
 GameObject:
@@ -3667,44 +3531,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34f36451b093ee4c83ad4aa5459d2ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textLComponent: {fileID: 0}
-  infoYG: {fileID: 11400000, guid: 162644796a8b0d044bce3d6fda0641e3, type: 2}
-  text: 
-  ru: 0
-  en: 0
-  tr: 0
-  az: 
-  be: 
-  he: 
-  hy: 
-  ka: 
-  et: 
-  fr: 
-  kk: 
-  ky: 
-  lt: 
-  lv: 
-  ro: 
-  tg: 
-  tk: 
-  uk: 
-  uz: 
-  es: 
-  pt: 
-  ar: 
-  id: 
-  ja: 
-  it: 
-  de: 
-  hi: 
-  changeOnlyFont: 0
-  fontNumber: 0
-  uniqueFont: {fileID: 0}
-  additionalText: {fileID: 0}
-  textHeight: 20
-  processTranslateLabel: 0/19 completed
-  componentTextField: 1
-  countLang: 0
 --- !u!1 &1583299704
 GameObject:
   m_ObjectHideFlags: 0
@@ -4231,11 +4057,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4ce16cdd64683aa45b636caa72bd3606, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.12
+      value: 0.11999993
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4ce16cdd64683aa45b636caa72bd3606, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.149
+      value: -0.14900002
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4ce16cdd64683aa45b636caa72bd3606, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4247,7 +4073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4ce16cdd64683aa45b636caa72bd3606, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4ce16cdd64683aa45b636caa72bd3606, type: 3}
       propertyPath: m_LocalRotation.z
@@ -4502,10 +4328,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2060943391}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -4555,16 +4381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b353ddefcaad44f820eff4869e37be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _normalTilePrefab: {fileID: 0}
-  _specialTilePrefab: {fileID: 0}
-  _maxCount: 20
-  _tileHolder: {fileID: 2111664369}
-  _startPoint: {fileID: 0}
-  _coin5: {fileID: 0}
-  _coin: {fileID: 0}
-  _bomb: {fileID: 0}
-  _startSpawnBomb: 0
-  _specialTileChance: 20
 --- !u!4 &2060943396
 Transform:
   m_ObjectHideFlags: 0
@@ -4782,44 +4598,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34f36451b093ee4c83ad4aa5459d2ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textLComponent: {fileID: 0}
-  infoYG: {fileID: 11400000, guid: 162644796a8b0d044bce3d6fda0641e3, type: 2}
-  text: 
-  ru: "\u041C\u043E\u043D\u0435\u0442\u044B:"
-  en: 'Coins:'
-  tr: 'Paralar:'
-  az: 
-  be: 
-  he: 
-  hy: 
-  ka: 
-  et: 
-  fr: 
-  kk: 
-  ky: 
-  lt: 
-  lv: 
-  ro: 
-  tg: 
-  tk: 
-  uk: 
-  uz: 
-  es: 
-  pt: 
-  ar: 
-  id: 
-  ja: 
-  it: 
-  de: 
-  hi: 
-  changeOnlyFont: 0
-  fontNumber: 0
-  uniqueFont: {fileID: 0}
-  additionalText: {fileID: 0}
-  textHeight: 20
-  processTranslateLabel: 0/19 completed
-  componentTextField: 1
-  countLang: 0
 --- !u!1001 &4555937782232335824
 PrefabInstance:
   m_ObjectHideFlags: 0

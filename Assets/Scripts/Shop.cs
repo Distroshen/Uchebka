@@ -1,6 +1,8 @@
-using TMPro;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Shop : MonoBehaviour
 {
@@ -83,7 +85,7 @@ public class Shop : MonoBehaviour
 
     private void UpdateUI()
     {
-        ScinBlueprint c = scins[scinIndex];
+        ScinBlueprint c = scins[scinIndex]; 
         if (c.isUnlocked)
         {
             buyButton.gameObject.SetActive(false);

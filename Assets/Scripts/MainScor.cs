@@ -9,13 +9,13 @@ public class MainScor : MonoBehaviour
     {
         //if (Scor.Instance != null)
         //{
-        //_highScoreText.text = $"Рекорд: {Scor.Instance.GetCurrentHighScore()}";
+            //_highScoreText.text = $"Рекорд: {Scor.Instance.GetCurrentHighScore()}";
         //}
         //else
         ////{
-        // На случай если меню загружено первым
-        //int savedScore = PlayerPrefs.GetInt("HighScore", 0);
-        //_highScoreText.text = $"Рекорд: {savedScore}";
+            // На случай если меню загружено первым
+            //int savedScore = PlayerPrefs.GetInt("HighScore", 0);
+            //_highScoreText.text = $"Рекорд: {savedScore}";
         //}
     }
 }

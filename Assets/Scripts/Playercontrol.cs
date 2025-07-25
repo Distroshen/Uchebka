@@ -6,7 +6,7 @@ public class Playercontroller : MonoBehaviour
     void Start()
     {
     }
-    void FixedUpdate()
+    void FixedUpdate() 
     {
         transform.Translate(Vector3.forward * Time.deltaTime * speed.Speed, Space.World);
     }

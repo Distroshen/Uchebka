@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,17 +9,26 @@ public class MusicController : MonoBehaviour
 
     [Header("Sound Settings")]
     [Range(0f, 1f)] public float maxVolume = 1f;
-    [Range(0f, 1f)] public float minVolume = 0.1f; // Минимальная громкость (не 0)
+    [Range(0f, 1f)] public float minVolume = 0.1f;
     public float volumeChangeSpeed = 5f;
+
+    [Header("Music Clips")]
+    public AudioClip defaultMusic; // Музыка по умолчанию
+    public AudioClip[] additionalMusic; // Дополнительные треки
 
     [Header("UI Settings")]
     public Image soundButtonImage;
-    public Sprite soundOnSprite; // Иконка "Звук есть"
-    public Sprite soundOffSprite; // Иконка "Звук выключен"
+    public Sprite soundOnSprite;
+    public Sprite soundOffSprite;
 
     private AudioSource musicSource;
-    private bool isSoundOn = true; // Всегда true при старте
+    private bool isSoundOn = true;
     private float targetVolume;
+    private AudioClip currentClip;
+    public AudioClip newClip;
+    public AudioClip newClip1;
+    public AudioClip newClip2;
+    private bool isChangingTrack = false;
 
     void Awake()
     {
@@ -39,22 +49,40 @@ public class MusicController : MonoBehaviour
 
     void Start()
     {
-        // 1. Всегда играем музыку при старте
+        // Загружаем последний выбранный трек или используем по умолчанию
+        string savedClipName = PlayerPrefs.GetString("CurrentMusicClip", "");
+        AudioClip savedClip = null;
+
+        if (!string.IsNullOrEmpty(savedClipName))
+        {
+            // Поиск сохраненного клипа среди доступных
+            foreach (var clip in additionalMusic)
+            {
+                if (clip.name == savedClipName)
+                {
+                    savedClip = clip;
+                    break;
+                }
+            }
+        }
+
+        currentClip = savedClip != null ? savedClip : defaultMusic;
+        PlayCurrentMusic();
+    }
+
+    private void PlayCurrentMusic()
+    {
+        if (currentClip == null) return;
+
+        musicSource.clip = currentClip;
         musicSource.Play();
-
-        // 2. Громкость на максимум (даже если в настройках было выключено)
-        targetVolume = maxVolume;
-        musicSource.volume = maxVolume;
-
-        // 3. Принудительно включаем звук и обновляем иконку
-        isSoundOn = true;
-        UpdateButtonImage();
+        targetVolume = isSoundOn ? maxVolume : minVolume;
+        musicSource.volume = targetVolume;
     }
 
     void Update()
     {
-        // Плавное изменение громкости
-        if (!Mathf.Approximately(musicSource.volume, targetVolume))
+        if (!Mathf.Approximately(musicSource.volume, targetVolume) && !isChangingTrack)
         {
             musicSource.volume = Mathf.Lerp(musicSource.volume, targetVolume,
                                            Time.deltaTime * volumeChangeSpeed);
@@ -63,7 +91,6 @@ public class MusicController : MonoBehaviour
 
     private void LoadSettings()
     {
-        // Загружаем настройки, но игнорируем их для музыки
         isSoundOn = PlayerPrefs.GetInt("SoundEnabled", 1) == 1;
     }
 
@@ -71,6 +98,124 @@ public class MusicController : MonoBehaviour
     {
         PlayerPrefs.SetInt("SoundEnabled", isSoundOn ? 1 : 0);
         PlayerPrefs.Save();
+    }
+
+    // Метод для изменения музыки из других скриптов
+    public void ChangeMusic ()
+    {
+        Debug.Log("Сраб");
+        if (newClip == null) return;
+        Debug.Log("Сработао");
+        StartCoroutine(SmoothChangeMusic());
+    }
+
+    public void ChangeMusic1()
+    {
+        Debug.Log("Сраб1");
+        if (newClip1 == null) return;
+        Debug.Log("Сработао1");
+        StartCoroutine(SmoothChangeMusic1());
+    }
+
+    public void ChangeMusic2()
+    {
+        Debug.Log("Сраб2");
+        if (newClip2 == null) return;
+        Debug.Log("Сработао2");
+        StartCoroutine(SmoothChangeMusic2());
+    }
+
+    private IEnumerator SmoothChangeMusic()
+    {
+        isChangingTrack = true;
+        float startVolume = musicSource.volume;
+
+        // Плавное уменьшение громкости
+        while (musicSource.volume > minVolume)
+        {
+            musicSource.volume -= Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        // Смена трека
+        currentClip = newClip1;
+        musicSource.clip = currentClip;
+        musicSource.Play();
+
+        // Сохраняем выбор музыки
+        PlayerPrefs.SetString("CurrentMusicClip", currentClip.name);
+        PlayerPrefs.Save();
+
+        // Плавное восстановление громкости
+        while (musicSource.volume < startVolume)
+        {
+            musicSource.volume += Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        isChangingTrack = false;
+    }
+
+    private IEnumerator SmoothChangeMusic1()
+    {
+        isChangingTrack = true;
+        float startVolume = musicSource.volume;
+
+        // Плавное уменьшение громкости
+        while (musicSource.volume > minVolume)
+        {
+            musicSource.volume -= Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        // Смена трека
+        currentClip = newClip;
+        musicSource.clip = currentClip;
+        musicSource.Play();
+
+        // Сохраняем выбор музыки
+        PlayerPrefs.SetString("CurrentMusicClip", currentClip.name);
+        PlayerPrefs.Save();
+
+        // Плавное восстановление громкости
+        while (musicSource.volume < startVolume)
+        {
+            musicSource.volume += Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        isChangingTrack = false;
+    }
+
+    private IEnumerator SmoothChangeMusic2()
+    {
+        isChangingTrack = true;
+        float startVolume = musicSource.volume;
+
+        // Плавное уменьшение громкости
+        while (musicSource.volume > minVolume)
+        {
+            musicSource.volume -= Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        // Смена трека
+        currentClip = newClip2;
+        musicSource.clip = currentClip;
+        musicSource.Play();
+
+        // Сохраняем выбор музыки
+        PlayerPrefs.SetString("CurrentMusicClip", currentClip.name);
+        PlayerPrefs.Save();
+
+        // Плавное восстановление громкости
+        while (musicSource.volume < startVolume)
+        {
+            musicSource.volume += Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        isChangingTrack = false;
     }
 
     public void ToggleSound()
@@ -85,7 +230,6 @@ public class MusicController : MonoBehaviour
     {
         if (soundButtonImage != null)
         {
-            // Всегда синхронизируем иконку с isSoundOn
             soundButtonImage.sprite = isSoundOn ? soundOnSprite : soundOffSprite;
         }
     }
@@ -93,5 +237,12 @@ public class MusicController : MonoBehaviour
     public void OnSoundButtonClick()
     {
         ToggleSound();
+    }
+
+    // Обновление кнопки звука при смене сцены
+    public void UpdateSoundButton(Image newButtonImage)
+    {
+        soundButtonImage = newButtonImage;
+        UpdateButtonImage();
     }
 }

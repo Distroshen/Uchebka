@@ -67,7 +67,7 @@ public class Tile : MonoBehaviour
 
         if (_timer < _startSpawnBomb)
         {
-            SafeCreateObject(randomPointIndex, ShouldSpawnCoin5() ? _coin : _coin5 );
+            SafeCreateObject(randomPointIndex, ShouldSpawnCoin5() ? _coin : _coin5);
         }
         else
         {

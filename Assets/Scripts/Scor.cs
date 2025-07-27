@@ -38,7 +38,7 @@ public class Scor : MonoBehaviour
 
     private void UpdateCurrentScore()
     {
-        _currentScore = Mathf.FloorToInt(   _player.position.z / _scoreMultiplier);
+        _currentScore = Mathf.FloorToInt(_player.position.z / _scoreMultiplier);
         _currentScoreText.text = _currentScore.ToString();
     }
 
@@ -53,7 +53,7 @@ public class Scor : MonoBehaviour
 
     public void OnPlayerDeath()
     {
-            SaveHighScore();
+        SaveHighScore();
     }
 
     private void SaveHighScore()

@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
             isTouching = false;
         }
     }
-IEnumerator SS()
+    IEnumerator SS()
     {
         yield return new WaitForSeconds(7);
         if (Speed < MaxSpeed)
@@ -126,7 +126,7 @@ IEnumerator SS()
     public void Dead1()
     {
         FindAnyObjectByType<Scor>().OnPlayerDeath();
-        Life = false;    
+        Life = false;
         Speed = 0;
         MaxSpeed = 0;
         Speedz = 0;

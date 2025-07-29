@@ -5,7 +5,7 @@ public class TileGenerator : MonoBehaviour
 {
     [Header("Основные настройки")]
     [SerializeField] private GameObject _normalTilePrefab;
-    [SerializeField] private GameObject _specialTilePrefab;
+    [SerializeField] private GameObject[] _specialTilePrefabs;
     [SerializeField] private int _maxCount = 5;
     [SerializeField] private Transform _tileHolder;
     [SerializeField] private Transform _startPoint;
@@ -14,6 +14,10 @@ public class TileGenerator : MonoBehaviour
     [SerializeField] private GameObject _coin5;
     [SerializeField] private GameObject _coin;
     [SerializeField] private GameObject _bomb;
+    [SerializeField] private GameObject _Ya1;
+    [SerializeField] private GameObject _Ya2;
+    [SerializeField] private GameObject _bocka1;
+    [SerializeField] private GameObject _bocka2;
     [SerializeField] private float _startSpawnBomb = 3;
 
     [Header("Вероятности")]
@@ -22,10 +26,11 @@ public class TileGenerator : MonoBehaviour
     private List<Tile> _tiles = new List<Tile>();
     private float _timer;
     private bool _isActive = true;
+    private Dictionary<GameObject, float> _tileLengthCache = new Dictionary<GameObject, float>();
 
     void Start()
     {
-
+        CachePrefabLengths();
         CreateFirstTile();
         GenerateInitialTiles();
     }
@@ -42,16 +47,39 @@ public class TileGenerator : MonoBehaviour
         }
     }
 
+    private void CachePrefabLengths()
+    {
+        CacheTileLength(_normalTilePrefab);
+        foreach (var prefab in _specialTilePrefabs)
+        {
+            CacheTileLength(prefab);
+        }
+    }
+
+    private void CacheTileLength(GameObject tilePrefab)
+    {
+        if (_tileLengthCache.ContainsKey(tilePrefab)) return;
+
+        if (tilePrefab.TryGetComponent(out Collider collider))
+        {
+            _tileLengthCache[tilePrefab] = collider.bounds.size.z;
+        }
+        else
+        {
+            _tileLengthCache[tilePrefab] = tilePrefab.transform.localScale.z;
+        }
+    }
 
     private void CreateFirstTile()
     {
         Vector3 startPos = _startPoint != null ? _startPoint.position : Vector3.zero;
-        CreateTile(_normalTilePrefab, startPos); // Первая плитка всегда обычная
+        CreateTile(_normalTilePrefab, startPos, false);
     }
 
     private void GenerateInitialTiles()
     {
-        for (int i = _tiles.Count; i < _maxCount; i++)
+        int tilesToCreate = Mathf.Max(0, _maxCount - _tiles.Count);
+        for (int i = 0; i < tilesToCreate; i++)
         {
             GenerateTile();
         }
@@ -68,58 +96,99 @@ public class TileGenerator : MonoBehaviour
         Tile lastTile = GetLastValidTile();
         if (lastTile == null) return;
 
-        Vector3 newPos = lastTile.transform.position + Vector3.forward * GetTileLength(lastTile);
+        GameObject prefabToUse = GetRandomTilePrefab(out bool isRotatable);
+        Vector3 spawnPosition = CalculateSpawnPosition(lastTile, prefabToUse);
 
-        // Случайный выбор типа плитки
-        bool shouldCreateSpecial = Random.Range(0f, 100f) <= _specialTileChance;
-        GameObject prefabToUse = shouldCreateSpecial ? _specialTilePrefab : _normalTilePrefab;
-
-        CreateTile(prefabToUse, newPos);
+        CreateTile(prefabToUse, spawnPosition, isRotatable);
     }
 
-    private void CreateTile(GameObject prefab, Vector3 position)
+    private GameObject GetRandomTilePrefab(out bool isRotatable)
     {
-        GameObject newTileObj = Instantiate(prefab, position, Quaternion.identity, _tileHolder);
-        Tile newTile = newTileObj.GetComponent<Tile>();
+        isRotatable = false;
+        bool isSpecial = Random.Range(0f, 100f) <= _specialTileChance;
 
-        if (newTile == null)
+        if (isSpecial && _specialTilePrefabs.Length > 0)
         {
-            Debug.LogError("Отсутствует компонент Tile!", this);
-            Destroy(newTileObj);
-            return;
+            int randomIndex = Random.Range(0, _specialTilePrefabs.Length);
+            GameObject specialPrefab = _specialTilePrefabs[randomIndex];
+            isRotatable = specialPrefab.CompareTag("Поворот");
+            return specialPrefab;
         }
 
-        newTile.Initialize(_coin5, _coin, _bomb, _startSpawnBomb, _timer);
-        _tiles.Add(newTile);
+        return _normalTilePrefab;
+    }
+
+    private Vector3 CalculateSpawnPosition(Tile lastTile, GameObject nextPrefab)
+    {
+        float nextTileLength = _tileLengthCache[nextPrefab];
+        float lastTileEndZ = GetTileEndPosition(lastTile);
+
+        return new Vector3(
+            _startPoint.position.x,
+            _startPoint.position.y,
+            lastTileEndZ + nextTileLength / 2f
+        );
+    }
+
+    private float GetTileEndPosition(Tile tile)
+    {
+        if (tile.TryGetComponent(out Collider collider))
+        {
+            return collider.bounds.max.z;
+        }
+        return tile.transform.position.z + tile.transform.localScale.z / 2f;
+    }
+
+    private void CreateTile(GameObject prefab, Vector3 position, bool isRotatable)
+    {
+        GameObject newTileObj = Instantiate(prefab, position, Quaternion.identity, _tileHolder);
+        newTileObj.transform.position = new Vector3(
+            _startPoint.position.x,
+            _startPoint.position.y,
+            position.z
+        );
+
+        if (isRotatable && Random.Range(0, 2) == 1)
+        {
+            newTileObj.transform.Rotate(0f, 180f, 0f);
+        }
+
+        if (newTileObj.TryGetComponent(out Tile newTile))
+        {
+            newTile.Initialize(
+                _coin5, _coin, _bomb,
+                _Ya1, _Ya2, _bocka1, _bocka2,
+                _startSpawnBomb, _timer
+            );
+            _tiles.Add(newTile);
+        }
+        else
+        {
+            Debug.LogError("Отсутствует компонент Tile!", newTileObj);
+            Destroy(newTileObj);
+        }
     }
 
     private Tile GetLastValidTile()
     {
         if (_tiles.Count == 0) return null;
 
-        Tile lastTile = _tiles[_tiles.Count - 1];
-        if (lastTile == null)
+        // Ищем последнюю валидную плитку с конца
+        for (int i = _tiles.Count - 1; i >= 0; i--)
         {
-            _tiles.RemoveAll(t => t == null);
-            return _tiles.Count > 0 ? _tiles[_tiles.Count - 1] : null;
+            if (_tiles[i] != null) return _tiles[i];
+            _tiles.RemoveAt(i);
         }
-        return lastTile;
-    }
 
-    private float GetTileLength(Tile tile)
-    {
-        // Оптимизация: предполагаем, что все плитки одного размера
-        return tile.transform.localScale.z;
-        // Альтернатива: можно добавить поле length в Tile
+        return null;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Tile tile = other.GetComponent<Tile>();
-        if (tile != null && _tiles.Contains(tile))
+        if (other.TryGetComponent(out Tile tile) && _tiles.Contains(tile))
         {
             _tiles.Remove(tile);
-            Destroy(other.gameObject);
+            Destroy(tile.gameObject);
         }
     }
 }

@@ -23,7 +23,10 @@ public class Tile : MonoBehaviour
     private const float BombChance = 30f;
     private const float YaChance = 15f;
     private const float BockaChance = 20f;
-    private const int MaxObstaclesPerTile = 2; // Максимальное количество препятствий на плитке
+    private const int MaxObstaclesPerTile = 2;
+
+    // Кэш для смещений объектов
+    private Dictionary<GameObject, float> _prefabBottomOffsets = new Dictionary<GameObject, float>();
 
     public void Initialize(
         GameObject coin5, GameObject coin, GameObject bomb,
@@ -46,7 +49,6 @@ public class Tile : MonoBehaviour
 
     private void GenerateObjects(ref List<Transform> points)
     {
-        // Проверка на специальное событие
         if (points.Count <= 2)
         {
             SpawnOneBombsMode();
@@ -59,25 +61,15 @@ public class Tile : MonoBehaviour
 
     private void SpawnOneBombsMode()
     {
-        // Создаем копию списка точек для безопасного удаления
         List<Transform> availablePoints = new List<Transform>(_points);
-
-        // Спавним 1 бомбы на случайных позициях
         SpawnObjectAtRandomPoint(ref availablePoints, _bomb);
-
-        // Заполняем остальные точки монетами
         FillRemainingPoints(availablePoints);
     }
 
     private void StandardSpawning()
     {
-        // Создаем копию списка точек для безопасного удаления
         List<Transform> availablePoints = new List<Transform>(_points);
-
-        // Спавним основные объекты
         SpawnObstacles(ref availablePoints);
-
-        // Заполняем оставшиеся точки монетами
         FillRemainingPoints(availablePoints);
     }
 
@@ -85,23 +77,18 @@ public class Tile : MonoBehaviour
     {
         if (points.Count == 0) return;
 
-        // Определяем общий шанс спавна препятствия
         float obstacleChance = _timer < _startSpawnBomb ? 0 :
             Mathf.Clamp(20f + (_timer / 2f), 0f, 50f);
 
-        // Максимальное количество препятствий
         int obstaclesToSpawn = Mathf.Min(MaxObstaclesPerTile, points.Count);
 
         for (int i = 0; i < obstaclesToSpawn; i++)
         {
-            // Проверяем шанс для каждого препятствия
             if (Random.Range(0f, 100f) < obstacleChance)
             {
                 GameObject obstaclePrefab = GetRandomObstacle();
                 SpawnObjectAtRandomPoint(ref points, obstaclePrefab);
             }
-
-            // Уменьшаем шанс для следующего препятствия
             obstacleChance *= 0.5f;
         }
     }
@@ -122,22 +109,26 @@ public class Tile : MonoBehaviour
     {
         if (points.Count == 0) return;
 
-        // Группируем точки по рядам (по координате Z)
         var rows = points
-            .GroupBy(p => Mathf.Round(p.position.z * 100f) / 100f) // Группировка с округлением
-            .OrderBy(g => g.Key) // Сортируем по Z
+            .GroupBy(p => Mathf.Round(p.position.z * 100f) / 100f)
+            .OrderBy(g => g.Key)
             .ToList();
 
         foreach (var row in rows)
         {
-            // Выбираем случайную точку в ряду
             var randomPoint = row.OrderBy(x => Random.value).FirstOrDefault();
             if (randomPoint != null)
             {
                 GameObject coinPrefab = ShouldSpawnCoin5() ? _coin5 : _coin;
-                Instantiate(coinPrefab, randomPoint.position, Quaternion.identity, transform);
+                SpawnCoin(coinPrefab, randomPoint.position);
             }
         }
+    }
+
+    private void SpawnCoin(GameObject coinPrefab, Vector3 position)
+    {
+        GameObject coin = Instantiate(coinPrefab, position, Quaternion.identity, transform);
+        AdjustObjectPosition(coin, position.y);
     }
 
     private void SpawnObjectAtRandomPoint(ref List<Transform> points, GameObject prefab)
@@ -148,31 +139,73 @@ public class Tile : MonoBehaviour
         Transform point = points[randomIndex];
         points.RemoveAt(randomIndex);
 
-        // Создаем объект
-        GameObject spawnedObject = Instantiate(
-            prefab,
-            point.position,
-            Quaternion.identity,
-            transform
-        );
-
-        // Применяем случайный поворот для объектов с тегом "Поворот"
+        GameObject spawnedObject = Instantiate(prefab, point.position, Quaternion.identity, transform);
         ApplyRandomRotation(spawnedObject);
+        AdjustObjectPosition(spawnedObject, point.position.y);
     }
 
     private void ApplyRandomRotation(GameObject spawnedObject)
     {
         if (spawnedObject.CompareTag("Поворот"))
         {
-            // Случайно решаем, нужно ли применять поворот (50% шанс)
             bool shouldRotate = Random.Range(0, 2) == 1;
-
             if (shouldRotate)
             {
-                /// Применяем поворот на 90 градусов по оси X
                 spawnedObject.transform.Rotate(0f, 90f, 0f, Space.Self);
             }
+        }//
+    }
+
+    private void AdjustObjectPosition(GameObject obj, float groundY)
+    {
+        float bottomOffset = GetBottomOffsetForPrefab(obj);
+        Vector3 newPosition = obj.transform.position;
+        newPosition.y = groundY + bottomOffset + 0.001f;
+        obj.transform.position = newPosition;
+    }
+
+    private float GetBottomOffsetForPrefab(GameObject prefab)
+    {
+        // Если смещение уже в кэше - возвращаем его
+        if (_prefabBottomOffsets.ContainsKey(prefab))
+        {
+            return _prefabBottomOffsets[prefab];
         }
+
+        // Создаем временный экземпляр для вычисления
+        GameObject temp = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+        temp.SetActive(false);
+
+        float bottomOffset = CalculateBottomOffset(temp);
+
+        Destroy(temp);
+
+        // Кэшируем результат
+        _prefabBottomOffsets[prefab] = bottomOffset;
+        return bottomOffset;
+    }
+
+    private float CalculateBottomOffset(GameObject obj)
+    {
+        // Пробуем получить коллайдер
+        Collider col = obj.GetComponentInChildren<Collider>();
+        if (col != null)
+        {
+            Bounds bounds = col.bounds;
+            return bounds.size.y / 2f;
+        }
+
+        // Если коллайдера нет, пробуем получить рендерер
+        Renderer renderer = obj.GetComponentInChildren<Renderer>();
+        if (renderer != null)
+        {
+            Bounds bounds = renderer.bounds;
+            return bounds.size.y / 2f;
+        }
+
+        // Если нет ни коллайдера, ни рендерера
+        Debug.LogWarning($"No Collider or Renderer found on {obj.name}");
+        return 0f;
     }
 
     private bool ShouldSpawnCoin5()
@@ -180,7 +213,6 @@ public class Tile : MonoBehaviour
         return _timer > 60f;
     }
 
-    // Добавляем метод для получения конечной позиции тайла
     public float GetEndPosition()
     {
         Collider col = GetComponentInChildren<Collider>();

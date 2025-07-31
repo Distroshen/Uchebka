@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -22,8 +23,6 @@ public class Tile : MonoBehaviour
     private const float BombChance = 30f;
     private const float YaChance = 15f;
     private const float BockaChance = 20f;
-    private const float TwoBombsChance = 10f;
-    private const float TwoBombsTimeThreshold = 5f;
     private const int MaxObstaclesPerTile = 2; // Максимальное количество препятствий на плитке
 
     public void Initialize(
@@ -41,15 +40,16 @@ public class Tile : MonoBehaviour
         _startSpawnBomb = startSpawnBomb;
         _timer = timer;
 
-        GenerateObjects();
+        List<Transform> availablePoints = new List<Transform>(_points);
+        GenerateObjects(ref availablePoints);
     }
 
-    private void GenerateObjects()
+    private void GenerateObjects(ref List<Transform> points)
     {
         // Проверка на специальное событие
-        if (_timer > TwoBombsTimeThreshold && Random.Range(0f, 100f) < TwoBombsChance)
+        if (points.Count <= 2)
         {
-            SpawnTwoBombsMode();
+            SpawnOneBombsMode();
         }
         else
         {
@@ -57,16 +57,15 @@ public class Tile : MonoBehaviour
         }
     }
 
-    private void SpawnTwoBombsMode()
+    private void SpawnOneBombsMode()
     {
         // Создаем копию списка точек для безопасного удаления
         List<Transform> availablePoints = new List<Transform>(_points);
 
-        // Спавним две бомбы на случайных позициях
-        SpawnObjectAtRandomPoint(ref availablePoints, _bomb);
+        // Спавним 1 бомбы на случайных позициях
         SpawnObjectAtRandomPoint(ref availablePoints, _bomb);
 
-        // Заполняем остальные точки
+        // Заполняем остальные точки монетами
         FillRemainingPoints(availablePoints);
     }
 
@@ -121,10 +120,23 @@ public class Tile : MonoBehaviour
 
     private void FillRemainingPoints(List<Transform> points)
     {
-        foreach (Transform point in points)
+        if (points.Count == 0) return;
+
+        // Группируем точки по рядам (по координате Z)
+        var rows = points
+            .GroupBy(p => Mathf.Round(p.position.z * 100f) / 100f) // Группировка с округлением
+            .OrderBy(g => g.Key) // Сортируем по Z
+            .ToList();
+
+        foreach (var row in rows)
         {
-            GameObject coinPrefab = ShouldSpawnCoin5() ? _coin5 : _coin;
-            Instantiate(coinPrefab, point.position, Quaternion.identity, transform);
+            // Выбираем случайную точку в ряду
+            var randomPoint = row.OrderBy(x => Random.value).FirstOrDefault();
+            if (randomPoint != null)
+            {
+                GameObject coinPrefab = ShouldSpawnCoin5() ? _coin5 : _coin;
+                Instantiate(coinPrefab, randomPoint.position, Quaternion.identity, transform);
+            }
         }
     }
 
@@ -136,11 +148,46 @@ public class Tile : MonoBehaviour
         Transform point = points[randomIndex];
         points.RemoveAt(randomIndex);
 
-        Instantiate(prefab, point.position, Quaternion.identity, transform);
+        // Создаем объект
+        GameObject spawnedObject = Instantiate(
+            prefab,
+            point.position,
+            Quaternion.identity,
+            transform
+        );
+
+        // Применяем случайный поворот для объектов с тегом "Поворот"
+        ApplyRandomRotation(spawnedObject);
+    }
+
+    private void ApplyRandomRotation(GameObject spawnedObject)
+    {
+        if (spawnedObject.CompareTag("Поворот"))
+        {
+            // Случайно решаем, нужно ли применять поворот (50% шанс)
+            bool shouldRotate = Random.Range(0, 2) == 1;
+
+            if (shouldRotate)
+            {
+                /// Применяем поворот на 90 градусов по оси X
+                spawnedObject.transform.Rotate(0f, 90f, 0f, Space.Self);
+            }
+        }
     }
 
     private bool ShouldSpawnCoin5()
     {
         return _timer > 60f;
+    }
+
+    // Добавляем метод для получения конечной позиции тайла
+    public float GetEndPosition()
+    {
+        Collider col = GetComponentInChildren<Collider>();
+        if (col != null)
+        {
+            return col.bounds.max.z;
+        }
+        return transform.position.z + transform.localScale.z / 2f;
     }
 }

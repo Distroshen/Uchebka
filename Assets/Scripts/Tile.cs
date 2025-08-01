@@ -160,7 +160,22 @@ public class Tile : MonoBehaviour
     {
         float bottomOffset = GetBottomOffsetForPrefab(obj);
         Vector3 newPosition = obj.transform.position;
-        newPosition.y = groundY + bottomOffset + 0.001f;
+
+        // Разные коэффициенты для разных объектов
+        float reductionFactor = 0.2f; // По умолчанию
+
+        if (obj.CompareTag("Поворот"))
+        {
+            // Для повернутых объектов - сильнее "утопить"
+            reductionFactor = 2;//
+        }
+        else if (obj == _bomb)
+        {
+            // Для бомб - меньше утапливать
+            reductionFactor = 0.3f;
+        }
+
+        newPosition.y = groundY + bottomOffset * reductionFactor;
         obj.transform.position = newPosition;
     }
 

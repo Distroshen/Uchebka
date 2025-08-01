@@ -1976,8 +1976,8 @@
         "y": 3.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -2649,8 +2649,8 @@
         "y": -1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -2832,8 +2832,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -3426,8 +3426,8 @@
     "m_CustomSlotLabel": "",
     "m_DismissedVersion": 0,
     "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
+    "overrideHLSLDeclaration": true,
+    "hlslDeclarationOverride": 2,
     "m_Hidden": false,
     "m_Value": {
         "e00": 1.0,
@@ -3666,7 +3666,7 @@
     "m_Title": "Sun Disc",
     "m_Position": {
         "x": -2232.799560546875,
-        "y": -1424.0
+        "y": -1423.999755859375
     }
 }
 
@@ -3730,8 +3730,8 @@
     "m_ObjectId": "306835f0270a4b4db7137044e0d8c7ae",
     "m_Title": "Stars",
     "m_Position": {
-        "x": -2133.600341796875,
-        "y": 737.5999755859375
+        "x": -2133.599853515625,
+        "y": 737.6002197265625
     }
 }
 
@@ -4036,8 +4036,8 @@
     "m_ObjectId": "3669c55d853e44a2af3aa5b4057a924f",
     "m_Title": "Skybox Color",
     "m_Position": {
-        "x": -1011.2000732421875,
-        "y": -28.0
+        "x": -1011.199951171875,
+        "y": -28.000118255615236
     }
 }
 
@@ -4617,7 +4617,7 @@
     ],
     "synonyms": [],
     "m_Precision": 1,
-    "m_PreviewExpanded": false,
+    "m_PreviewExpanded": true,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 2,
     "m_CustomColors": {
@@ -5006,8 +5006,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -5580,7 +5580,7 @@
     "m_ObjectId": "629c7335fbbc471bb0e111c85fe9333d",
     "m_Title": "Horizon Parameters",
     "m_Position": {
-        "x": -1638.400146484375,
+        "x": -1638.39990234375,
         "y": 28.0
     }
 }
@@ -5600,8 +5600,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -5807,15 +5807,16 @@
     "m_CustomSlotLabel": "",
     "m_DismissedVersion": 0,
     "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
+    "overrideHLSLDeclaration": true,
+    "hlslDeclarationOverride": 2,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"d026cc944c942e246bafb9a1989cc161\",\"type\":3}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
     "useTilingAndOffset": false,
+    "useTexelSize": true,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -6451,8 +6452,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -6747,8 +6748,8 @@
     "m_ObjectId": "8083b3374eac4ab785696c23006d0a1b",
     "m_Title": "Sun Gradient",
     "m_Position": {
-        "x": -1673.5999755859375,
-        "y": -2036.7998046875
+        "x": -1673.599853515625,
+        "y": -2036.7999267578125
     }
 }
 
@@ -7223,7 +7224,7 @@
     "m_ObjectId": "9469bf752941479f9a03a8f2e10afe2b",
     "m_Title": "Horizon Fog",
     "m_Position": {
-        "x": -1841.600341796875,
+        "x": -1841.599853515625,
         "y": 1213.60009765625
     }
 }
@@ -7666,8 +7667,8 @@
     "m_ObjectId": "a81103936b084e9bba052616ea4fe5d8",
     "m_Title": "Mask out Stars to avoid rendering them in front of the Sun",
     "m_Position": {
-        "x": 543.9999389648438,
-        "y": 179.0
+        "x": 544.0001220703125,
+        "y": 178.39990234375
     }
 }
 
@@ -8399,10 +8400,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2645.599853515625,
-            "y": -408.79986572265627,
-            "width": 132.800048828125,
-            "height": 33.599822998046878
+            "x": -2646.400146484375,
+            "y": -408.7999572753906,
+            "width": 134.400146484375,
+            "height": 33.600006103515628
         }
     },
     "m_Slots": [
@@ -9311,7 +9312,7 @@
     "m_ObjectId": "d4fbf02f857042c8bb15f28c494c1f60",
     "m_Title": "Sun Mask",
     "m_Position": {
-        "x": -2992.00048828125,
+        "x": -2992.0,
         "y": -823.2000732421875
     }
 }
@@ -9741,6 +9742,7 @@
     "m_SourceType": 0,
     "m_FunctionName": "CalculateMainLight",
     "m_FunctionSource": "d8ff3a33b255abf4fb6d14d5cd8eccab",
+    "m_FunctionSourceUsePragmas": true,
     "m_FunctionBody": "Enter function body here..."
 }
 
@@ -10247,7 +10249,7 @@
     "m_ShaderOutputName": "New",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 0.0,
+        "x": 3.0,
         "y": 0.0,
         "z": 0.0
     },
@@ -10448,7 +10450,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0

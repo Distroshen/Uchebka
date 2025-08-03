@@ -33,7 +33,7 @@ public class MainMenu : MonoBehaviour
     IEnumerator START1()
     {
         fadeout.SetActive(true);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(2);
     }
 
@@ -57,6 +57,6 @@ public class MainMenu : MonoBehaviour
     {
         fadeout.SetActive(true);
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene(3);
     }
 }

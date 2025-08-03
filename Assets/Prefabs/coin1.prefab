@@ -123,5 +123,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinFX: {fileID: 0}
   rotationSpeed: 180
-  jumpHeight: 0.5
-  jumpSpeed: 2
+  jumpHeight: 0.01
+  jumpSpeed: 1.5

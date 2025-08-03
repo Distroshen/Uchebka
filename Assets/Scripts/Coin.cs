@@ -7,15 +7,15 @@ public class Coin : MonoBehaviour
     [SerializeField] private float rotationSpeed = 180f; // Скорость вращения в градусах/сек
 
     [Header("Настройки прыжка")]
-    [SerializeField] private float jumpHeight = 0.5f;    // Высота прыжка
-    [SerializeField] private float jumpSpeed = 3f;       // Скорость прыжка
+    [SerializeField] private float jumpHeight = 0.4f;    // Высота прыжка
+    [SerializeField] private float jumpSpeed = 1.5f;       // Скорость прыжка
 
     private Vector3 startPosition; // Начальная позиция монетки
     private float timer;           // Таймер для анимации
 
     void Start()
     {
-        jumpHeight = Random.Range(0.3f, 0.7f);
+        jumpHeight = Random.Range(0.2f, 0.5f);
         // Сохраняем начальную позицию
         startPosition = transform.position;
     }
@@ -32,11 +32,12 @@ public class Coin : MonoBehaviour
         // Применяем новую позицию
         transform.position = startPosition + new Vector3(0, yOffset, 0);
     }
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
-        coinFX.Play();
+        //coinFX.Play();
+        this.gameObject.SetActive(false);
         GameManager gameManager = FindAnyObjectByType<GameManager>();
         gameManager.AddCoin(); // Добавляем 1 монету
-        this.gameObject.SetActive(false);
+
     }
 }

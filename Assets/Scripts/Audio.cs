@@ -14,7 +14,7 @@ public class MusicController : MonoBehaviour
 
     [Header("Music Clips")]
     public AudioClip defaultMusic; // Музыка по умолчанию
-    public AudioClip[] additionalMusic; // Дополнительные треки
+    public AudioClip[] additionalMusic; // Дополнительные треки...
 
     [Header("UI Settings")]
     public Image soundButtonImage;

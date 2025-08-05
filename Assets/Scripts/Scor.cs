@@ -9,10 +9,12 @@ public class Scor : MonoBehaviour
     [SerializeField] public TextMeshProUGUI _currentScoreText;
     [SerializeField] public TextMeshProUGUI _highScoreText;
     [SerializeField] public Transform _player;
+    [SerializeField] private TextMeshProUGUI _titleText;
+
     private int _currentScore;
     private int _highScore;
     public Player player;
-
+    
     private const string HighScoreKey = "HighScore";
 
 
@@ -74,7 +76,7 @@ public class Scor : MonoBehaviour
     {
         if (_highScoreText != null)
         {
-            _highScoreText.text = $"Рекорд: {_highScore}";
+            _highScoreText.text = $"{_highScore}";
         }
     }
 }

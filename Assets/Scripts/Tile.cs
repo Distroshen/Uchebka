@@ -28,6 +28,8 @@ public class Tile : MonoBehaviour
     // Кэш для смещений объектов
     private Dictionary<GameObject, float> _prefabBottomOffsets = new Dictionary<GameObject, float>();
 
+    [SerializeField] private AudioSource BombFX;
+    public bool Life;
     public void Initialize(
         GameObject coin5, GameObject coin, GameObject bomb,
         GameObject Ya1, GameObject Ya2, GameObject bocka1, GameObject bocka2,
@@ -236,5 +238,25 @@ public class Tile : MonoBehaviour
             return col.bounds.max.z;
         }
         return transform.position.z + transform.localScale.z / 2f;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Самый легкий и быстрый способ проверки
+        if (other.CompareTag("Player"))
+        {
+            // Ваш код обработки триггера игрока
+            HandlePlayerTrigger();
+        }
+    }
+
+    private void HandlePlayerTrigger()
+    {
+        Debug.Log("Player entered the trigger!");
+
+        BombFX.Play();
+        this.gameObject.SetActive(false);
+        Life = false;
+        FindAnyObjectByType<BustB>().B1();
     }
 }

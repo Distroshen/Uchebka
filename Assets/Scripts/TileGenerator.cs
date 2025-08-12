@@ -18,6 +18,9 @@ public class TileGenerator : MonoBehaviour
     [SerializeField] private GameObject _Ya2;
     [SerializeField] private GameObject _bocka1;
     [SerializeField] private GameObject _bocka2;
+    [SerializeField] private GameObject _drop;    // Усилитель скорости (капля)
+    [SerializeField] private GameObject _bass;    // Усилитель брони (бас-гитара)
+    [SerializeField] private GameObject _gnome;
     [SerializeField] private float _startSpawnBomb = 3;
 
     [Header("Вероятности")]
@@ -158,7 +161,7 @@ public class TileGenerator : MonoBehaviour
             newTile.Initialize(
                 _coin5, _coin, _bomb,
                 _Ya1, _Ya2, _bocka1, _bocka2,
-                _startSpawnBomb, _timer
+                _startSpawnBomb, _timer, _drop,_bass, _gnome
             );
             _tiles.Add(newTile);
         }

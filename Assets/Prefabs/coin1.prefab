@@ -22,15 +22,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: faf9b1888edfd3940802ec19cd8c83a2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.505
+      value: -14.020435
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: faf9b1888edfd3940802ec19cd8c83a2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.012
+      value: 0.19486272
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: faf9b1888edfd3940802ec19cd8c83a2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10.109761
+      value: -8.962395
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: faf9b1888edfd3940802ec19cd8c83a2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -38,7 +38,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: faf9b1888edfd3940802ec19cd8c83a2, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: faf9b1888edfd3940802ec19cd8c83a2, type: 3}
       propertyPath: m_LocalRotation.y
@@ -71,6 +71,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: faf9b1888edfd3940802ec19cd8c83a2, type: 3}
       propertyPath: m_Name
       value: coin1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: faf9b1888edfd3940802ec19cd8c83a2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -123,5 +127,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinFX: {fileID: 0}
   rotationSpeed: 180
-  jumpHeight: 0.01
-  jumpSpeed: 1.5
+  jumpHeight: 0.5
+  jumpSpeed: 2

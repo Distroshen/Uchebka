@@ -14,6 +14,9 @@ public class Tile : MonoBehaviour
     private GameObject _Ya2;
     private GameObject _bocka1;
     private GameObject _bocka2;
+    private GameObject _drop;    // Усилитель скорости (капля)
+    private GameObject _bass;    // Усилитель брони (бас-гитара)
+    private GameObject _gnome;   // Сложное препятствие (гном)
 
     // Настройки
     private float _startSpawnBomb;
@@ -23,17 +26,25 @@ public class Tile : MonoBehaviour
     private const float BombChance = 30f;
     private const float YaChance = 15f;
     private const float BockaChance = 20f;
+    private const float GnomeChance = 1f; // Шанс гнома (самый низкий)
     private const int MaxObstaclesPerTile = 2;
+
+    // Шансы усилителей
+    private static float _boostersChance = 10f; // Начальный шанс 10%
+    private const float BoosterDecayFactor = 0.9f; // Множитель уменьшения шанса
+    private const float MinBoosterChance = 0.5f; // Минимальный шанс
 
     // Кэш для смещений объектов
     private Dictionary<GameObject, float> _prefabBottomOffsets = new Dictionary<GameObject, float>();
 
     [SerializeField] private AudioSource BombFX;
     public bool Life;
+
     public void Initialize(
         GameObject coin5, GameObject coin, GameObject bomb,
         GameObject Ya1, GameObject Ya2, GameObject bocka1, GameObject bocka2,
-        float startSpawnBomb, float timer)
+        float startSpawnBomb, float timer,
+        GameObject drop, GameObject bass, GameObject gnome)
     {
         _coin5 = coin5;
         _coin = coin;
@@ -42,6 +53,9 @@ public class Tile : MonoBehaviour
         _Ya2 = Ya2;
         _bocka1 = bocka1;
         _bocka2 = bocka2;
+        _drop = drop;
+        _bass = bass;
+        _gnome = gnome;
         _startSpawnBomb = startSpawnBomb;
         _timer = timer;
 
@@ -98,11 +112,17 @@ public class Tile : MonoBehaviour
     private GameObject GetRandomObstacle()
     {
         float randomValue = Random.Range(0f, 100f);
+        float currentChance = BombChance;
 
         if (randomValue < BombChance) return _bomb;
-        if (randomValue < BombChance + YaChance) return _Ya1;
-        if (randomValue < BombChance + YaChance * 2) return _Ya2;
-        if (randomValue < BombChance + YaChance * 2 + BockaChance) return _bocka1;
+        currentChance += YaChance;
+        if (randomValue < currentChance) return _Ya1;
+        currentChance += YaChance;
+        if (randomValue < currentChance) return _Ya2;
+        currentChance += BockaChance;
+        if (randomValue < currentChance) return _bocka1;
+        currentChance += GnomeChance;
+        if (randomValue < currentChance) return _gnome;
 
         return _bocka2;
     }
@@ -121,8 +141,18 @@ public class Tile : MonoBehaviour
             var randomPoint = row.OrderBy(x => Random.value).FirstOrDefault();
             if (randomPoint != null)
             {
-                GameObject coinPrefab = ShouldSpawnCoin5() ? _coin5 : _coin;
-                SpawnCoin(coinPrefab, randomPoint.position);
+                // Проверка на спавн усилителя вместо монеты
+                if (_timer > 10f && Random.Range(0f, 100f) < _boostersChance)
+                {
+                    GameObject booster = Random.Range(0, 2) == 0 ? _drop : _bass;
+                    SpawnCoin(booster, randomPoint.position);
+                    _boostersChance = Mathf.Max(MinBoosterChance, _boostersChance * BoosterDecayFactor);
+                }
+                else
+                {
+                    GameObject coinPrefab = ShouldSpawnCoin5() ? _coin5 : _coin;
+                    SpawnCoin(coinPrefab, randomPoint.position);
+                }
             }
         }
     }
@@ -137,9 +167,65 @@ public class Tile : MonoBehaviour
     {
         if (points.Count == 0) return;
 
-        int randomIndex = Random.Range(0, points.Count);
-        Transform point = points[randomIndex];
-        points.RemoveAt(randomIndex);
+        Transform point = null;
+        //bool isGnomeSpecialCase = false;
+
+        // Обработка гнома (требует 3 точки)
+        if (prefab == _gnome && points.Count >= 3)
+        {
+            // Группируем точки по Z-координате
+            var groups = points
+                .GroupBy(p => Mathf.Round(p.position.z * 100f) / 100f)
+                .Where(g => g.Count() >= 3)
+                .ToList();
+
+            if (groups.Count > 0)
+            {
+                // Выбираем случайную группу
+                var group = groups[Random.Range(0, groups.Count)];
+                // Сортируем точки по X
+                var sortedPoints = group.OrderBy(p => p.position.x).ToList();
+
+                // Ищем три последовательные точки
+                for (int i = 0; i < sortedPoints.Count - 2; i++)
+                {
+                    float diff1 = sortedPoints[i + 1].position.x - sortedPoints[i].position.x;
+                    float diff2 = sortedPoints[i + 2].position.x - sortedPoints[i + 1].position.x;
+
+                    // Проверяем равномерное распределение
+                    if (Mathf.Abs(diff1 - diff2) < 0.1f && diff1 > 0.1f)
+                    {
+                        // Нашли подходящие точки
+                        Transform leftPoint = sortedPoints[i];
+                        point = sortedPoints[i + 1]; // Гном по центру
+                        Transform rightPoint = sortedPoints[i + 2];
+
+                        // Удаляем левую точку (пустая)
+                        points.Remove(leftPoint);
+                        // Удаляем центральную точку (гном)
+                        points.Remove(point);
+                        // Правая точка остаётся для монеты/усилителя
+
+                        //isGnomeSpecialCase = true;..ч
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Если гном не спавнится особым способом - выбираем случайную точку
+        if (point == null)
+        {
+            if (prefab == _gnome)
+            {
+                // Если для гнома не нашлось места - заменяем на бомбу
+                prefab = _bomb;
+            }
+
+            int randomIndex = Random.Range(0, points.Count);
+            point = points[randomIndex];
+            points.RemoveAt(randomIndex);
+        }
 
         GameObject spawnedObject = Instantiate(prefab, point.position, Quaternion.identity, transform);
         ApplyRandomRotation(spawnedObject);
@@ -155,7 +241,7 @@ public class Tile : MonoBehaviour
             {
                 spawnedObject.transform.Rotate(0f, 90f, 0f, Space.Self);
             }
-        }//
+        }
     }
 
     private void AdjustObjectPosition(GameObject obj, float groundY)
@@ -168,13 +254,19 @@ public class Tile : MonoBehaviour
 
         if (obj.CompareTag("Поворот"))
         {
-            // Для повернутых объектов - сильнее "утопить"
-            reductionFactor = 2;//
+            reductionFactor = 2f;
         }
         else if (obj == _bomb)
         {
-            // Для бомб - меньше утапливать
             reductionFactor = 0.3f;
+        }
+        else if (obj == _drop || obj == _bass)
+        {
+            reductionFactor = 0.4f;
+        }
+        else if (obj == _gnome)
+        {
+            reductionFactor = 0.35f;
         }
 
         newPosition.y = groundY + bottomOffset * reductionFactor;
@@ -242,21 +334,23 @@ public class Tile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Самый легкий и быстрый способ проверки
         if (other.CompareTag("Player"))
         {
-            // Ваш код обработки триггера игрока
             HandlePlayerTrigger();
         }
     }
 
     private void HandlePlayerTrigger()
     {
-        Debug.Log("Player entered the trigger!");
-
         BombFX.Play();
         this.gameObject.SetActive(false);
         Life = false;
         FindAnyObjectByType<BustB>().B1();
+    }
+
+    // Статический метод для сброса шанса усилителей
+    public static void ResetBoostersChance()
+    {
+        _boostersChance = 10f;
     }
 }

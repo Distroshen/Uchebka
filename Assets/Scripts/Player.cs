@@ -107,9 +107,13 @@ public class Player : MonoBehaviour
     IEnumerator SS()
     {
         yield return new WaitForSeconds(7);
-        if (Speed < MaxSpeed)
+        if (Speed <= MaxSpeed)
         {
             Speed += 1;
+            if (Speed >= Speedz + 6)
+            {
+                Speedz += 1;
+            }    
             StartCoroutine(SS());
         }
     }

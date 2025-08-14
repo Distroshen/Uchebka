@@ -12,8 +12,12 @@ public class Bust : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        BustFX.Play();
-        StartCoroutine(Bust1());
+        if (other.CompareTag("Player"))
+        {
+            BustFX.Play();
+            StartCoroutine(Bust1());
+        }
+
     }
 
     IEnumerator Bust1()

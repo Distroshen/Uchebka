@@ -34,10 +34,13 @@ public class Coin : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        //coinFX.Play();
-        this.gameObject.SetActive(false);
-        GameManager gameManager = FindAnyObjectByType<GameManager>();
-        gameManager.AddCoin(); // Добавляем 1 монету
+        if (other.CompareTag("Player"))
+        {
+            //coinFX.Play();
+            this.gameObject.SetActive(false);
+            GameManager gameManager = FindAnyObjectByType<GameManager>();
+            gameManager.AddCoin(); // Добавляем 1 монету
+        }
 
     }
 }

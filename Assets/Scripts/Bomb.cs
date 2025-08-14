@@ -8,9 +8,12 @@ public class Bomb : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        BombFX.Play();
-        this.gameObject.SetActive(false);
-        Life = false;
-        FindAnyObjectByType<BustB>().B1();
+        if (other.CompareTag("Player"))
+        {
+            BombFX.Play();
+            this.gameObject.SetActive(false);
+            Life = false;
+            FindAnyObjectByType<BustB>().B1();
+        }
     }
 }

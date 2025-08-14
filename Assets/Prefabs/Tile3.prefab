@@ -244,15 +244,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: cfdc2382389b0254080629d9571b865e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.3214426
+      value: -12.869107
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cfdc2382389b0254080629d9571b865e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.08500004
+      value: 26.085
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cfdc2382389b0254080629d9571b865e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.7716637
+      value: -96.43387
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cfdc2382389b0254080629d9571b865e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -366,6 +366,8 @@ MonoBehaviour:
   _points:
   - {fileID: 8975395707159849046}
   - {fileID: 8643223642636829081}
+  BombFX: {fileID: 0}
+  Life: 0
 --- !u!65 &661194794268877928
 BoxCollider:
   m_ObjectHideFlags: 0

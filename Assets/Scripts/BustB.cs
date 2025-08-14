@@ -17,8 +17,12 @@ public class BustB : MonoBehaviour
     // Метод для обработки столкновения
     private void OnTriggerEnter(Collider other)
     {
-        BustBFX.Play();
-        StartCoroutine(Bronya());
+        if (other.CompareTag("Player"))
+        {
+            BustBFX.Play();
+            StartCoroutine(Bronya());
+        }
+
     }
     IEnumerator Bronya()
     {

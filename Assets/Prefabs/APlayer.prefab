@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2712893365130089864}
   m_Layer: 0
   m_Name: APlay
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 4585262154275810800}
   - component: {fileID: 182857503810217610}
   - component: {fileID: 6984871659809441604}
+  - component: {fileID: 6987569090290947448}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -204,7 +205,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 210.5
+  far clip plane: 300
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -309,6 +310,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff12bb2e67c0d34f99869f693152a05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6987569090290947448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6847168278082881831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f75f3603d8a6cb4f91d0ea74313eb9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  physicalObjects: []
 --- !u!1001 &498996971093419047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -437,10 +451,14 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: b126d04f527333648844948b79180835, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: ab96e849667442642ae4ab22aca02440, type: 2}
+      objectReference: {fileID: 2100000, guid: b5230e6dd54851f469976aff16a4d26c, type: 2}
     - target: {fileID: 919132149155446097, guid: b126d04f527333648844948b79180835, type: 3}
       propertyPath: m_Name
       value: watermelon_hair
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b126d04f527333648844948b79180835, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -448,7 +466,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b126d04f527333648844948b79180835, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3406158380630754520}
+      addedObject: {fileID: 7880673725475317934}
   m_SourcePrefab: {fileID: 100100000, guid: b126d04f527333648844948b79180835, type: 3}
 --- !u!4 &1204584066871282965 stripped
 Transform:
@@ -460,8 +478,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b126d04f527333648844948b79180835, type: 3}
   m_PrefabInstance: {fileID: 1674551462648621822}
   m_PrefabAsset: {fileID: 0}
---- !u!135 &3406158380630754520
-SphereCollider:
+--- !u!143 &7880673725475317934
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -475,12 +493,16 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1363969
-  m_Center: {x: -0.004614234, y: 1.1066649, z: -0.01125139}
+  m_Height: 4.4861236
+  m_Radius: 1.0133604
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &3169354280614544942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -549,6 +571,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: APlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 73d8600727323314fb3d383942f42f10, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -584,6 +610,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1115027614979006403}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d8600727323314fb3d383942f42f10, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4800699683305698786}
   m_SourcePrefab: {fileID: 100100000, guid: 73d8600727323314fb3d383942f42f10, type: 3}
 --- !u!1 &2826755596486310783 stripped
 GameObject:
@@ -605,7 +634,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -651,6 +680,23 @@ MonoBehaviour:
   - {fileID: 2521778921373744370}
   - {fileID: 2016586234750900143}
   - {fileID: 4499815603148522992}
+--- !u!114 &4800699683305698786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2826755596486310783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c1d750b1be3a546b0991c7a0066021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilePrefabs:
+  - {fileID: 4006711871713362718, guid: a2bbef657f91d2f44abe04c852bf72da, type: 3}
+  player: {fileID: 3202472272037781957}
+  tileLength: 15
+  numberOfTiles: 3
 --- !u!4 &3202472272037781957 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 73d8600727323314fb3d383942f42f10, type: 3}
@@ -732,6 +778,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 315b777d989b2774fbbd854d1ab95e04, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -739,6 +789,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 315b777d989b2774fbbd854d1ab95e04, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2439672573440796945}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 315b777d989b2774fbbd854d1ab95e04, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5093360594404365089}
   m_SourcePrefab: {fileID: 100100000, guid: 315b777d989b2774fbbd854d1ab95e04, type: 3}
 --- !u!1 &2521778921373744370 stripped
 GameObject:
@@ -762,10 +815,35 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 1.1385319
   m_Center: {x: -0.004614234, y: 1.1088002, z: -0.01125139}
+--- !u!143 &5093360594404365089
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2521778921373744370}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 4.494664
+  m_Radius: 1.0133604
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &3005299796270179912 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 315b777d989b2774fbbd854d1ab95e04, type: 3}
@@ -847,6 +925,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3b465c24629e8604ca037ea6f772b812, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -854,6 +936,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b465c24629e8604ca037ea6f772b812, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7829123581967482291}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b465c24629e8604ca037ea6f772b812, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3514954955998754871}
   m_SourcePrefab: {fileID: 100100000, guid: 3b465c24629e8604ca037ea6f772b812, type: 3}
 --- !u!4 &3835200872487182154 stripped
 Transform:
@@ -882,7 +967,32 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1.2967225, y: 2.8609872, z: 8.55524}
   m_Center: {x: -0.013259292, y: 0.6272497, z: -2.2015939}
+--- !u!143 &3514954955998754871
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4499815603148522992}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 4.115489
+  m_Radius: 2.0760262
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}

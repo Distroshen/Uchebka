@@ -162,6 +162,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f34385d1c6622f64cbab242c97aad9df, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7316435745705075314}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f34385d1c6622f64cbab242c97aad9df, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5625370610036822190}
   m_SourcePrefab: {fileID: 100100000, guid: f34385d1c6622f64cbab242c97aad9df, type: 3}
 --- !u!23 &4691639984188109050 stripped
 MeshRenderer:
@@ -240,6 +243,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BombFX: {fileID: 0}
   Life: 0
+--- !u!114 &5625370610036822190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6493330593204572463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9db1c7f7deca19e468f243ab8ebd11c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7495675636357918821
 PrefabInstance:
   m_ObjectHideFlags: 0

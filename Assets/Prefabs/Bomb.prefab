@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 9048555166886443668}
   m_Layer: 0
   m_Name: Bomb
-  m_TagString: "\u041F\u043E\u0432\u043E\u0440\u043E\u0442"
+  m_TagString: Bomb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647

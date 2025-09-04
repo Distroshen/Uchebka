@@ -40,12 +40,14 @@ public class PurchaseButton : MonoBehaviour
             audioSource.playOnAwake = false;
         }
         button = GetComponent<Button>();
-        coins = FindObjectOfType<CoinManager>();
+        // Replace deprecated FindObjectOfType with FindFirstObjectByType
+        coins = FindFirstObjectByType<CoinManager>();
 
         LoadPurchaseState();
         InitializeButton();
         UpdateButtonState();
     }
+
 
     private void InitializeButton()
     {

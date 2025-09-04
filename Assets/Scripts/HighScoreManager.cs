@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class HighScoreManager : MonoBehaviour
@@ -17,62 +16,102 @@ public class HighScoreManager : MonoBehaviour
         }
     }
 
+    [System.Serializable]
+    private class HighScoreWrapper
+    {
+        public List<HighScoreEntry> highScores;
+
+        public HighScoreWrapper(List<HighScoreEntry> highScores)
+        {
+            this.highScores = highScores;
+        }
+    }
+
     public List<HighScoreEntry> highScores = new List<HighScoreEntry>();
     private const int maxEntries = 10;
     private const string playerPrefsKey = "HighScores";
 
+    // Кэшированные значения для оптимизации
+    private HighScoreEntry _lastEntry;
+    private bool _isInitialized = false;
+
     void Start()
     {
-        // Инициализируем дефолтные значения (разработчики)
         if (!PlayerPrefs.HasKey(playerPrefsKey))
         {
             InitializeDefaultScores();
         }
+        else
+        {
+            LoadHighScores();
+        }
 
-        LoadHighScores();
+        _isInitialized = true;
+
+        // Кэшируем последнюю запись для быстрого доступа
+        UpdateCachedLastEntry();
     }
 
     private void InitializeDefaultScores()
     {
-        highScores.Add(new HighScoreEntry("Dev1", 50));
-        highScores.Add(new HighScoreEntry("Dev2", 45));
-        highScores.Add(new HighScoreEntry("Dev3", 40));
-        highScores.Add(new HighScoreEntry("Dev4", 35));
-        highScores.Add(new HighScoreEntry("Dev5", 30));
-        highScores.Add(new HighScoreEntry("Dev6", 25));
-        highScores.Add(new HighScoreEntry("Dev7", 20));
-        highScores.Add(new HighScoreEntry("Dev8", 15));
-        highScores.Add(new HighScoreEntry("Dev9", 11));
-        highScores.Add(new HighScoreEntry("Dev10", 1));
+        // Используем предварительно созданный список для уменьшения операций
+        HighScoreEntry[] defaultScores = {
+            new HighScoreEntry("Dev1", 50),
+            new HighScoreEntry("Dev2", 45),
+            new HighScoreEntry("Dev3", 40),
+            new HighScoreEntry("Dev4", 35),
+            new HighScoreEntry("Dev5", 30),
+            new HighScoreEntry("Dev6", 25),
+            new HighScoreEntry("Dev7", 20),
+            new HighScoreEntry("Dev8", 15),
+            new HighScoreEntry("Dev9", 11),
+            new HighScoreEntry("Dev10", 1)
+        };
 
+        highScores.AddRange(defaultScores);
         SaveHighScores();
     }
 
     public void AddNewScore(string name, int score)
     {
-        highScores.Add(new HighScoreEntry(name, score));
+        // Создаем новую запись
+        var newEntry = new HighScoreEntry(name, score);
 
-        // Сортируем по убыванию и оставляем только топ-10
-        highScores = highScores
-            .OrderByDescending(x => x.score)
-            .Take(maxEntries)
-            .ToList();
+        // Находим позицию для вставки
+        int insertIndex = 0;
+        for (; insertIndex < highScores.Count; insertIndex++)
+        {
+            if (score > highScores[insertIndex].score)
+            {
+                break;
+            }
+        }
+
+        // Вставляем на правильную позицию
+        highScores.Insert(insertIndex, newEntry);
+
+        // Удаляем лишние записи если превышен лимит
+        if (highScores.Count > maxEntries)
+        {
+            highScores.RemoveAt(highScores.Count - 1);
+        }
+
+        // Обновляем кэшированную последнюю запись
+        UpdateCachedLastEntry();
 
         SaveHighScores();
     }
 
     public bool IsNewHighScore(int score)
     {
-        // Если таблица не заполнена или счет больше последнего в топ-10
-        if (highScores.Count < maxEntries || score > highScores.Last().score)
-        {
-            return true;
-        }
-        return false;
+        // Используем кэшированную последнюю запись для быстрой проверки
+        return highScores.Count < maxEntries || score > _lastEntry.score;
     }
 
     private void SaveHighScores()
     {
+        if (!_isInitialized) return;
+
         string json = JsonUtility.ToJson(new HighScoreWrapper(highScores));
         PlayerPrefs.SetString(playerPrefsKey, json);
         PlayerPrefs.Save();
@@ -88,25 +127,35 @@ public class HighScoreManager : MonoBehaviour
         }
     }
 
-    // Вспомогательный класс для сериализации списка
-    [System.Serializable]
-    private class HighScoreWrapper
+    private void UpdateCachedLastEntry()
     {
-        public List<HighScoreEntry> highScores;
-
-        public HighScoreWrapper(List<HighScoreEntry> highScores)
+        if (highScores.Count > 0)
         {
-            this.highScores = highScores;
+            _lastEntry = highScores[highScores.Count - 1];
+        }
+        else
+        {
+            _lastEntry = null;
         }
     }
 
-    // Для отображения таблицы (вызовите этот метод в UI)
+    // Оптимизированный метод для отображения таблицы
     public void DisplayHighScores()
     {
+        if (!Application.isEditor) return;
+
         Debug.Log("=== HIGH SCORES ===");
         for (int i = 0; i < highScores.Count; i++)
         {
             Debug.Log($"{i + 1}. {highScores[i].playerName}: {highScores[i].score}");
         }
+    }
+
+    // Очистка рекордов (для отладки)
+    public void ClearHighScores()
+    {
+        highScores.Clear();
+        PlayerPrefs.DeleteKey(playerPrefsKey);
+        UpdateCachedLastEntry();
     }
 }

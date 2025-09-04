@@ -110,6 +110,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7dc6ca9451750844db173d5e2c0062f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 33c1312791d7ee64fa01e3f55a6c2376, type: 2}
     - target: {fileID: 919132149155446097, guid: 7dc6ca9451750844db173d5e2c0062f5, type: 3}
       propertyPath: m_Name
       value: Tile4
@@ -135,6 +139,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7dc6ca9451750844db173d5e2c0062f5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2869397438672913019}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7dc6ca9451750844db173d5e2c0062f5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8579162971218487287}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7dc6ca9451750844db173d5e2c0062f5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4382098422182063149}
@@ -168,6 +175,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.081381, y: 0.3, z: 6.176526}
   m_Center: {x: 0.14567292, y: -0.13, z: 0}
+--- !u!114 &8579162971218487287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2871243839747829906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dde195b1a5c25ee44983cdf5c690cf70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4382098422182063149
 MonoBehaviour:
   m_ObjectHideFlags: 0

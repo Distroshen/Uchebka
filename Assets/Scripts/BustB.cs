@@ -1,46 +1,79 @@
-using System.Collections;
 using UnityEngine;
-
 
 public class BustB : MonoBehaviour
 {
-    [SerializeField] AudioSource BustBFX;
-    [SerializeField] private AudioSource BombFX;
-    [SerializeField] GameObject BMesh;
-    private bool Bron;
+    [SerializeField] AudioSource bustBFX;
+    [SerializeField] private AudioSource bombFX;
+    [SerializeField] GameObject bMesh;
+
+    private bool bron;
+    private Player player;
+    private WaitForSeconds waitForSevenSeconds;
 
     private void Start()
     {
-        Bron = false;
+        bron = false;
+
+        // Кэшируем игрока один раз
+        player = Player.Instance != null ? Player.Instance :
+                FindAnyObjectByType<Player>();
+
+        // Предварительно создаем WaitForSeconds для оптимизации
+        waitForSevenSeconds = new WaitForSeconds(7f);
     }
 
     // Метод для обработки столкновения
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (bron || !other.CompareTag("Player")) return;
+
+        if (bustBFX != null)
         {
-            BustBFX.Play();
-            StartCoroutine(Bronya());
+            bustBFX.Play();
         }
 
+        StartCoroutine(Bronya());
     }
-    IEnumerator Bronya()
+
+    private System.Collections.IEnumerator Bronya()
     {
-        Bron = true;
-        yield return new WaitForSeconds(7);
-        Bron = false;
+        bron = true;
+
+        // Визуально показываем броню (если есть меш)
+        if (bMesh != null)
+        {
+            bMesh.SetActive(true);
+        }
+
+        yield return waitForSevenSeconds;
+
+        bron = false;
+
+        // Скрываем броню
+        if (bMesh != null)
+        {
+            bMesh.SetActive(false);
+        }
     }
 
     public void B1()
     {
-        if (Bron)
+        if (bron)
         {
-            Debug.Log("1");
+            Debug.Log("Броня активна, урон блокирован");
+            return;
         }
-        else
+
+        // Воспроизводим звук взрыва
+        if (bombFX != null)
         {
-            BombFX.Play();
-            FindAnyObjectByType<Player>().Dead1();
+            bombFX.Play();
+        }
+
+        // Вызываем смерть игрока
+        if (player != null)
+        {
+            player.Dead1();
         }
     }
 }

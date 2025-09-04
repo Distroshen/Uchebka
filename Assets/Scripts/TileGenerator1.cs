@@ -12,14 +12,16 @@ public class TileGenerator_Back : MonoBehaviour
 
     [Header("Вероятности")]
     [Range(0, 100)][SerializeField] private float _specialTileChance = 20f;
+
     private List<Tile> _tiles = new List<Tile>();
     private float _timer;
     private bool _isActive = true;
-    private Dictionary<GameObject, float> _tileLengthCache = new Dictionary<GameObject, float>();
+    private float _nextSpawnZ = 0f; // Текущая позиция для спавна
+    private const float TILE_OFFSET = 10f; // Фиксированное расстояние между тайлами
 
     void Start()
     {
-        CachePrefabLengths();
+        _nextSpawnZ = _startPoint != null ? _startPoint.position.z : 0f;
         CreateFirstTile();
         GenerateInitialTiles();
     }
@@ -36,33 +38,11 @@ public class TileGenerator_Back : MonoBehaviour
         }
     }
 
-    private void CachePrefabLengths()
-    {
-        CacheTileLength(_normalTilePrefab);
-        foreach (var prefab in _specialTilePrefabs)
-        {
-            CacheTileLength(prefab);
-        }
-    }
-
-    private void CacheTileLength(GameObject tilePrefab)
-    {
-        if (_tileLengthCache.ContainsKey(tilePrefab)) return;
-
-        if (tilePrefab.TryGetComponent(out Collider collider))
-        {
-            _tileLengthCache[tilePrefab] = collider.bounds.size.z;
-        }
-        else
-        {
-            _tileLengthCache[tilePrefab] = tilePrefab.transform.localScale.z;
-        }
-    }
-
     private void CreateFirstTile()
     {
         Vector3 startPos = _startPoint != null ? _startPoint.position : Vector3.zero;
         CreateTile(_normalTilePrefab, startPos, false);
+        _nextSpawnZ += TILE_OFFSET; // Увеличиваем позицию для следующего тайла
     }
 
     private void GenerateInitialTiles()
@@ -82,11 +62,8 @@ public class TileGenerator_Back : MonoBehaviour
             return;
         }
 
-        Tile lastTile = GetLastValidTile();
-        if (lastTile == null) return;
-
         GameObject prefabToUse = GetRandomTilePrefab(out bool isRotatable);
-        Vector3 spawnPosition = CalculateSpawnPosition(lastTile, prefabToUse);
+        Vector3 spawnPosition = CalculateSpawnPosition();
 
         CreateTile(prefabToUse, spawnPosition, isRotatable);
     }
@@ -107,35 +84,18 @@ public class TileGenerator_Back : MonoBehaviour
         return _normalTilePrefab;
     }
 
-    private Vector3 CalculateSpawnPosition(Tile lastTile, GameObject nextPrefab)
+    private Vector3 CalculateSpawnPosition()
     {
-        float nextTileLength = _tileLengthCache[nextPrefab];
-        float lastTileEndZ = GetTileEndPosition(lastTile);
-
         return new Vector3(
             _startPoint.position.x,
             _startPoint.position.y,
-            lastTileEndZ + nextTileLength / 2f
+            _nextSpawnZ
         );
-    }
-
-    private float GetTileEndPosition(Tile tile)
-    {
-        if (tile.TryGetComponent(out Collider collider))
-        {
-            return collider.bounds.max.z;
-        }
-        return tile.transform.position.z + tile.transform.localScale.z / 2f;
     }
 
     private void CreateTile(GameObject prefab, Vector3 position, bool isRotatable)
     {
         GameObject newTileObj = Instantiate(prefab, position, Quaternion.identity, _tileHolder);
-        newTileObj.transform.position = new Vector3(
-            _startPoint.position.x,
-            _startPoint.position.y,
-            position.z
-        );
 
         if (isRotatable && Random.Range(0, 2) == 1)
         {
@@ -151,6 +111,8 @@ public class TileGenerator_Back : MonoBehaviour
             Debug.LogError("Отсутствует компонент Tile!", newTileObj);
             Destroy(newTileObj);
         }
+
+        _nextSpawnZ += TILE_OFFSET; // Увеличиваем позицию для следующего тайла
     }
 
     private Tile GetLastValidTile()

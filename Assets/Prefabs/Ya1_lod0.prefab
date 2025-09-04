@@ -143,6 +143,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ya1_lod0
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8604775c061b8ca48a0fcc0f1096bcfe, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -183,8 +187,8 @@ LODGroup:
   serializedVersion: 2
   m_LocalReferencePoint: {x: 0, y: 0, z: 0}
   m_Size: 1
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
   m_LastLODIsBillboard: 0
   m_LODs:
   - screenRelativeHeight: 0.0444

@@ -10,7 +10,7 @@ public class Bomb : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            BombFX.Play();
+            //BombFX.Play();
             this.gameObject.SetActive(false);
             Life = false;
             FindAnyObjectByType<BustB>().B1();

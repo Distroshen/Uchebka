@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Tile : MonoBehaviour
 {
@@ -38,7 +37,7 @@ public class Tile : MonoBehaviour
     // Кэш вертикальных смещений для префабов
     private Dictionary<GameObject, float> _prefabBottomOffsets = new Dictionary<GameObject, float>();
 
-    //[SerializeField] private AudioSource BombFX; // Звуковой эффект бомбы
+    [SerializeField] private AudioSource BombFX; // Звуковой эффект бомбы
     public bool Life; // Флаг активности тайла
 
     // Инициализация тайла
@@ -56,7 +55,8 @@ public class Tile : MonoBehaviour
         _Ya2 = Ya2;
         _bocka1 = bocka1;
         _bocka2 = bocka2;
-        _drop = drop;
+        _drop
+= drop;
         _bass = bass;
         _gnome = gnome;
 
@@ -175,7 +175,10 @@ public class Tile : MonoBehaviour
     }
 
     // Спавн монеты/усилителя
-    private void SpawnCoin(GameObject coinPrefab, Vector3 position)
+    private
+
+
+void SpawnCoin(GameObject coinPrefab, Vector3 position)
     {
         GameObject coin = Instantiate(coinPrefab, position, Quaternion.identity, transform);
         AdjustObjectPosition(coin, position.y); // Корректировка позиции
@@ -281,7 +284,10 @@ public class Tile : MonoBehaviour
     private float GetBottomOffsetForPrefab(GameObject prefab)
     {
         // Использование кэшированного значения
-        if (_prefabBottomOffsets.ContainsKey(prefab))
+        if
+
+
+(_prefabBottomOffsets.ContainsKey(prefab))
         {
             return _prefabBottomOffsets[prefab];
         }
@@ -347,7 +353,7 @@ public class Tile : MonoBehaviour
     // Обработка триггера игрока
     private void HandlePlayerTrigger()
     {
-        //BombFX.Play(); // Звук взрыва
+        BombFX.Play(); // Звук взрыва
         this.gameObject.SetActive(false); // Деактивация тайла
         Life = false; // Обновление статуса
         FindAnyObjectByType<BustB>().B1(); // Вызов метода разрушения
@@ -359,11 +365,21 @@ public class Tile : MonoBehaviour
         _boostersChance = 10f;
     }
 
-    private void Start()
+    // Метод для очистки всех сгенерированных объектов на тайле
+    public void ClearGeneratedObjects()
     {
-        SpawnTile();
-    }
-    public void SpawnTile()
-    {
+        // Удаляем все дочерние объекты, которые не являются частью самой платформы
+        foreach (Transform child in transform)
+        {
+            // Проверяем, является ли объект сгенерированным (монеты, бомбы и т.д.)
+            if (child.CompareTag("Coin") || child.CompareTag("Bomb") ||
+                child.CompareTag("Obstacle") || child.CompareTag("Booster"))
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        // Сбрасываем шанс усилителей при очистке
+        ResetBoostersChance();
     }
 }

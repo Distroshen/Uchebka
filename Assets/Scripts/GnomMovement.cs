@@ -3,73 +3,74 @@ using UnityEngine;
 public class GnomeMovement : MonoBehaviour
 {
     [Header("Настройки прыжка")]
-    [SerializeField] private float jumpHeight = 0.3f;        // Высота прыжка
-    [SerializeField] private float sideStep = 0.2f;          // Ширина шага в сторону
-    [SerializeField] private float jumpDuration = 0.5f;      // Продолжительность одного прыжка
-    [SerializeField] private float bodyTilt = 15f;           // Наклон тела при прыжке
+    [SerializeField] private float jumpHeight = 0.3f;
+    [SerializeField] private float sideStep = 0.2f;
+    [SerializeField] private float jumpDuration = 0.5f;
+    [SerializeField] private float bodyTilt = 15f;
 
     private float _jumpTimer;
     private bool _isJumpingLeft;
     private Vector3 _startPosition;
     private Quaternion _startRotation;
 
+    // Кэшированные значения для оптимизации
+    private Transform _transform;
+    private float _fourTimesJumpHeight; // 4f * jumpHeight
+    private float _inverseJumpDuration; // 1f / jumpDuration
+    private const float PI = Mathf.PI;
+
     void Start()
     {
-        _startPosition = transform.localPosition;
-        _startRotation = transform.localRotation;
-        _jumpTimer = Random.Range(0f, jumpDuration); // Случайная начальная фаза
+        _transform = transform;
+        _startPosition = _transform.localPosition;
+        _startRotation = _transform.localRotation;
+
+        // Предварительные вычисления
+        _fourTimesJumpHeight = 4f * jumpHeight;
+        _inverseJumpDuration = 1f / jumpDuration;
+
+        _jumpTimer = Random.Range(0f, jumpDuration);
     }
 
     void Update()
     {
-        // Обновляем таймер прыжка
         _jumpTimer += Time.deltaTime;
 
-        // Сбрасываем таймер при завершении цикла
         if (_jumpTimer > jumpDuration)
         {
             _jumpTimer = 0f;
-            _isJumpingLeft = !_isJumpingLeft; // Меняем направление
+            _isJumpingLeft = !_isJumpingLeft;
         }
 
-        // Вычисляем прогресс прыжка (0-1)
-        float progress = _jumpTimer / jumpDuration;
+        float progress = _jumpTimer * _inverseJumpDuration;
 
-        // Рассчитываем позицию и вращение
-        Vector3 newPosition = CalculateJumpPosition(progress);
-        Quaternion newRotation = CalculateBodyTilt(progress);
-
-        // Применяем трансформации
-        transform.localPosition = newPosition;
-        transform.localRotation = newRotation;
+        // Применяем трансформации напрямую
+        ApplyTransformations(progress);
     }
 
-    private Vector3 CalculateJumpPosition(float progress)
+    private void ApplyTransformations(float progress)
     {
-        // Параболическая траектория прыжка (y = 4 * h * x * (1 - x))
-        float height = 4f * jumpHeight * progress * (1f - progress);
+        // Вычисляем высоту прыжка
+        float heightProgress = progress * (1f - progress);
+        float height = _fourTimesJumpHeight * heightProgress;
 
-        // Боковое смещение (с плавным началом и концом)
+        // Боковое смещение
         float sideMovement = Mathf.SmoothStep(0f, 1f, progress);
         if (!_isJumpingLeft) sideMovement = -sideMovement;
         float xPos = _startPosition.x + sideMovement * sideStep;
 
-        return new Vector3(
+        // Применяем позицию
+        _transform.localPosition = new Vector3(
             xPos,
             _startPosition.y + height,
             _startPosition.z
         );
-    }
 
-    private Quaternion CalculateBodyTilt(float progress)
-    {
-        // Максимальный наклон в середине прыжка
-        float tiltAmount = Mathf.Sin(progress * Mathf.PI) * bodyTilt;
-
-        // Направление наклона зависит от направления прыжка
+        // Вычисляем и применяем вращение
+        float tiltAmount = Mathf.Sin(progress * PI) * bodyTilt;
         float tiltDirection = _isJumpingLeft ? 1f : -1f;
 
-        return Quaternion.Euler(
+        _transform.localRotation = Quaternion.Euler(
             _startRotation.eulerAngles.x,
             _startRotation.eulerAngles.y,
             _startRotation.eulerAngles.z + tiltAmount * tiltDirection
@@ -83,17 +84,27 @@ public class GnomeMovement : MonoBehaviour
 
         Gizmos.color = Color.cyan;
         Vector3 startPos = transform.position;
+        float fourTimesJumpHeight = 4f * jumpHeight;
 
         // Рисуем возможные траектории прыжков
-        for (int i = 0; i < 20; i++)
+        for (int i = 1; i < 20; i++)
         {
             float progress = i / 20f;
-            float height = 4f * jumpHeight * progress * (1f - progress);
+            float prevProgress = (i - 1) / 20f;
+
+            float height = fourTimesJumpHeight * progress * (1f - progress);
+            float prevHeight = fourTimesJumpHeight * prevProgress * (1f - prevProgress);
 
             // Влево
             Vector3 leftPos = new Vector3(
                 startPos.x - progress * sideStep,
                 startPos.y + height,
+                startPos.z
+            );
+
+            Vector3 prevLeftPos = new Vector3(
+                startPos.x - prevProgress * sideStep,
+                startPos.y + prevHeight,
                 startPos.z
             );
 
@@ -104,20 +115,14 @@ public class GnomeMovement : MonoBehaviour
                 startPos.z
             );
 
-            if (i > 0)
-            {
-                Gizmos.DrawLine(leftPos, new Vector3(
-                    startPos.x - (i - 1) / 20f * sideStep,
-                    startPos.y + 4f * jumpHeight * (i - 1) / 20f * (1f - (i - 1) / 20f),
-                    startPos.z
-                ));
+            Vector3 prevRightPos = new Vector3(
+                startPos.x + prevProgress * sideStep,
+                startPos.y + prevHeight,
+                startPos.z
+            );
 
-                Gizmos.DrawLine(rightPos, new Vector3(
-                    startPos.x + (i - 1) / 20f * sideStep,
-                    startPos.y + 4f * jumpHeight * (i - 1) / 20f * (1f - (i - 1) / 20f),
-                    startPos.z
-                ));
-            }
+            Gizmos.DrawLine(leftPos, prevLeftPos);
+            Gizmos.DrawLine(rightPos, prevRightPos);
         }
     }
 }

@@ -1,143 +1,155 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPoolManager : MonoBehaviour
+public class TileObjectPool : MonoBehaviour
 {
-    public static ObjectPoolManager Instance;
+    [Header("Настройки пула")]
+    [SerializeField] private GameObject _tilePrefab; // Префаб тайла
+    [SerializeField] private int _initialPoolSize = 15; // Начальный размер пула
+    [SerializeField] private Transform _startPoint; // Стартовая позиция
 
-    [SerializeField] private GameObject tilePrefab;
-    [SerializeField] private GameObject coinPrefab;
-    [SerializeField] private GameObject bombPrefab;
-    [SerializeField] private int poolSize = 20;
-    [SerializeField] private Transform parentContainer;
-    [SerializeField] private float tileLength = 10f;
-    [SerializeField] private Vector3 startPosition = Vector3.zero;
-
-    private Queue<GameObject> tilePool = new Queue<GameObject>();
-    private Queue<GameObject> coinPool = new Queue<GameObject>();
-    private Queue<GameObject> bombPool = new Queue<GameObject>();
-    private List<GameObject> activeTiles = new List<GameObject>();
-    private Vector3 nextTilePosition;
-
-    private void Awake()
-    {
-        Instance = this;
-        nextTilePosition = startPosition;
-        InitializePools();
-    }
+    [Header("Списки объектов")]
+    public List<GameObject> activeTiles = new List<GameObject>(); // Активные тайлы
+    public List<GameObject> inactiveTiles = new List<GameObject>(); // Неактивные тайлы
 
     private void Start()
     {
-        for (int i = 0; i < 13; i++)
+        InitializePool();
+    }
+
+    // Инициализация пула объектов
+    private void InitializePool()
+    {
+        for (int i = 0; i < _initialPoolSize; i++)
         {
-            SpawnTile();
+            CreateNewTile();
         }
     }
 
-    private void InitializePools()
+    // Создание нового тайла
+    private void CreateNewTile()
     {
-        // Initialize Tile pool
-        for (int i = 0; i < poolSize; i++)
-        {
-            GameObject obj = Instantiate(tilePrefab, parentContainer);
-            obj.SetActive(false);
-            tilePool.Enqueue(obj);
-        }
+        GameObject tile = Instantiate(_tilePrefab, transform);
 
-        // Initialize Coin pool
-        for (int i = 0; i < poolSize; i++)
-        {
-            GameObject obj = Instantiate(coinPrefab, parentContainer);
-            obj.SetActive(false);
-            coinPool.Enqueue(obj);
-        }
+        // Устанавливаем начальную позицию
+        Vector3 position = _startPoint.position;
+        position.z += 5.15f;
+        tile.transform.position = position;
 
-        // Initialize Bomb pool
-        for (int i = 0; i < poolSize; i++)
+        // Добавляем обработчик столкновений
+        TilePoolHandler handler = tile.GetComponent<TilePoolHandler>();
+        if (handler == null)
         {
-            GameObject obj = Instantiate(bombPrefab, parentContainer);
-            obj.SetActive(false);
-            bombPool.Enqueue(obj);
+            handler = tile.AddComponent<TilePoolHandler>();
         }
-    }
+        handler.Initialize(this);
 
-    public GameObject GetTile()
-    {
-        if (tilePool.Count > 0)
-        {
-            GameObject tile = tilePool.Dequeue();
-            tile.SetActive(true);
-            return tile;
-        }
-        return Instantiate(tilePrefab, parentContainer);
-    }
-
-    public GameObject GetCoin()
-    {
-        if (coinPool.Count > 0)
-        {
-            GameObject coin = coinPool.Dequeue();
-            coin.SetActive(true);
-            return coin;
-        }
-        return Instantiate(coinPrefab, parentContainer);
-    }
-
-    public GameObject GetBomb()
-    {
-        if (bombPool.Count > 0)
-        {
-            GameObject bomb = bombPool.Dequeue();
-            bomb.SetActive(true);
-            return bomb;
-        }
-        return Instantiate(bombPrefab, parentContainer);
-    }
-
-    public void ReturnTile(GameObject tile)
-    {
+        // Деактивируем и добавляем в пул неактивных
         tile.SetActive(false);
-        tilePool.Enqueue(tile);
+        inactiveTiles.Add(tile);
     }
 
-    public void ReturnCoin(GameObject coin)
+    // Получение тайла из пула
+    public GameObject GetTile(Vector3 position)
     {
-        coin.SetActive(false);
-        coinPool.Enqueue(coin);
-    }
+        // Если нет неактивных тайлов, создаем новый
+        if (inactiveTiles.Count == 0)
+        {
+            CreateNewTile();
+        }
 
-    public void ReturnBomb(GameObject bomb)
-    {
-        bomb.SetActive(false);
-        bombPool.Enqueue(bomb);
-    }
+        // Берем первый неактивный тайл
+        GameObject tile = inactiveTiles[0];
+        inactiveTiles.RemoveAt(0);
 
-    private void SpawnTile()
-    {
-        GameObject tile = GetTile();
-        tile.transform.position = nextTilePosition;
-        nextTilePosition.z += tileLength;
+        // Устанавливаем позицию
+        tile.transform.position = position;
+
+        // Очищаем сгенерированные объекты перед активацией
+        Tile tileComponent = tile.GetComponent<Tile>();
+        if (tileComponent != null)
+        {
+            tileComponent.ClearGeneratedObjects();
+        }
+
+        // Активируем и добавляем в список активных
+        tile.SetActive(true);
         activeTiles.Add(tile);
 
-        // Spawn objects on tile
-        TileController tileController = tile.GetComponent<TileController>();
-        if (tileController != null)
-        {
-            tileController.SpawnObjects();
-        }
+        return tile;
     }
 
-    public void RecycleTile(GameObject tile)
+    // Возврат тайла в пул
+    public void ReturnTile(GameObject tile)
     {
-        // Return all children objects (coins and bombs) to pools
-        TileController tileController = tile.GetComponent<TileController>();
-        if (tileController != null)
+        if (activeTiles.Contains(tile))
         {
-            tileController.DeactivateAllObjects();
+            activeTiles.Remove(tile);
         }
 
-        ReturnTile(tile);
-        activeTiles.Remove(tile);
-        SpawnTile();
+        tile.SetActive(false);
+
+        if (!inactiveTiles.Contains(tile))
+        {
+            inactiveTiles.Add(tile);
+        }
+
+        // Очищаем сгенерированные объекты
+        Tile tileComponent = tile.GetComponent<Tile>();
+        if (tileComponent != null)
+        {
+            tileComponent.ClearGeneratedObjects();
+        }
+
+        // Перемещаем тайл перед самой дальней платформой
+        RepositionTile(tile);
+    }
+
+    // Перемещение тайла перед самой дальней активной платформой
+    private void RepositionTile(GameObject tile)
+    {
+        float farthestZ = GetFarthestTilePosition();
+        Vector3 newPosition = tile.transform.position;
+        newPosition.z = farthestZ + 10f; // Добавляем 10 единиц по Z
+        tile.transform.position = newPosition;
+    }
+
+    // Получение позиции самой дальней активной платформы
+    private float GetFarthestTilePosition()
+    {
+        if (activeTiles.Count == 0)
+        {
+            return _startPoint.position.z + 5.15f;
+        }
+
+        float maxZ = activeTiles[0].transform.position.z;
+        foreach (GameObject tile in activeTiles)
+        {
+            if (tile.transform.position.z > maxZ)
+            {
+                maxZ = tile.transform.position.z;
+            }
+        }
+
+        return maxZ;
+    }
+}
+
+// Вспомогательный класс для обработки столкновений тайлов
+public class TilePoolHandler : MonoBehaviour
+{
+    private TileObjectPool _pool;
+
+    public void Initialize(TileObjectPool pool)
+    {
+        _pool = pool;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Dest"))
+        {
+            _pool.ReturnTile(gameObject);
+        }
     }
 }

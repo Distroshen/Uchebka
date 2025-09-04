@@ -440,11 +440,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7015620641451525320}
   - component: {fileID: 6742343431844405200}
-  - component: {fileID: 8860453004062988034}
   - component: {fileID: 5357804935860026682}
   m_Layer: 0
   m_Name: Coin5 1
-  m_TagString: COIN5
+  m_TagString: Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -490,28 +489,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.08, y: 1.05, z: 0.1}
   m_Center: {x: 0, y: 0.22, z: 0}
---- !u!95 &8860453004062988034
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6661570372051903273}
-  m_Enabled: 0
-  m_Avatar: {fileID: 9000000, guid: 73d8600727323314fb3d383942f42f10, type: 3}
-  m_Controller: {fileID: 9100000, guid: 60aed939d4463384eb3fdf7f88943164, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &5357804935860026682
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -139,6 +139,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: boost_lod0
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3535c14f3a8a41c40a20d8a818bdbd6d, type: 3}
+      propertyPath: m_TagString
+      value: Booster
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

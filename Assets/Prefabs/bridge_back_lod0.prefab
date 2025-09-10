@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 33c1312791d7ee64fa01e3f55a6c2376, type: 2}
     - target: {fileID: -1006152891943354624, guid: d01a98a995d64bf41aab089a3f6a91ee, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d01a98a995d64bf41aab089a3f6a91ee, type: 3}
       propertyPath: m_Name
@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d01a98a995d64bf41aab089a3f6a91ee, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2071054237012530244, guid: d01a98a995d64bf41aab089a3f6a91ee, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 33c1312791d7ee64fa01e3f55a6c2376, type: 2}
     - target: {fileID: 5926493457245714745, guid: d01a98a995d64bf41aab089a3f6a91ee, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -166,15 +166,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a4e739f560a136847ab65eb683e1f2b6, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5926493457245714745, guid: a4e739f560a136847ab65eb683e1f2b6, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8847949007932096686, guid: a4e739f560a136847ab65eb683e1f2b6, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -231,19 +231,16 @@ LODGroup:
   m_AnimateCrossFading: 1
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.031464897
+  - screenRelativeHeight: 0.0459996
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 1704537508660815164}
     - renderer: {fileID: 8803396783875179211}
-  - screenRelativeHeight: 0.00472681
+  - screenRelativeHeight: 0.011083215
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 103781382257850851}
     - renderer: {fileID: 4131723632983580688}
-  - screenRelativeHeight: 0.00086998043
-    fadeTransitionWidth: 0
-    renderers: []
   m_Enabled: 1
 --- !u!114 &4693243834363579224
 MonoBehaviour:

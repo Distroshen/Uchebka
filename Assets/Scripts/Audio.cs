@@ -28,6 +28,9 @@ public class MusicController : MonoBehaviour
     public AudioClip newClip;
     public AudioClip newClip1;
     public AudioClip newClip2;
+     public AudioClip newClip3;
+    public AudioClip newClip4;
+    public AudioClip newClip5;
     private bool isChangingTrack = false;
 
     void Awake()
@@ -124,6 +127,27 @@ public class MusicController : MonoBehaviour
         Debug.Log("Сработао2");
         StartCoroutine(SmoothChangeMusic2());
     }
+    public void ChangeMusic3()
+    {
+        Debug.Log("Сраб2");
+        if (newClip3 == null) return;
+        Debug.Log("Сработао2");
+        StartCoroutine(SmoothChangeMusic3());
+    }
+    public void ChangeMusic4()
+    {
+        Debug.Log("Сраб2");
+        if (newClip4 == null) return;
+        Debug.Log("Сработао2");
+        StartCoroutine(SmoothChangeMusic4());
+    }
+    public void ChangeMusic5()
+    {
+        Debug.Log("Сраб2");
+        if (newClip5 == null) return;
+        Debug.Log("Сработао2");
+        StartCoroutine(SmoothChangeMusic5());
+    }
 
     private IEnumerator SmoothChangeMusic()
     {
@@ -201,6 +225,100 @@ public class MusicController : MonoBehaviour
 
         // Смена трека
         currentClip = newClip2;
+        musicSource.clip = currentClip;
+        musicSource.Play();
+
+        // Сохраняем выбор музыки
+        PlayerPrefs.SetString("CurrentMusicClip", currentClip.name);
+        PlayerPrefs.Save();
+
+        // Плавное восстановление громкости
+        while (musicSource.volume < startVolume)
+        {
+            musicSource.volume += Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        isChangingTrack = false;
+    }
+
+    private IEnumerator SmoothChangeMusic3()
+    {
+        isChangingTrack = true;
+        float startVolume = musicSource.volume;
+
+        // Плавное уменьшение громкости
+        while (musicSource.volume > minVolume)
+        {
+            musicSource.volume -= Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        // Смена трека
+        currentClip = newClip3;
+        musicSource.clip = currentClip;
+        musicSource.Play();
+
+        // Сохраняем выбор музыки
+        PlayerPrefs.SetString("CurrentMusicClip", currentClip.name);
+        PlayerPrefs.Save();
+
+        // Плавное восстановление громкости
+        while (musicSource.volume < startVolume)
+        {
+            musicSource.volume += Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        isChangingTrack = false;
+    }
+
+    private IEnumerator SmoothChangeMusic4()
+    {
+        isChangingTrack = true;
+        float startVolume = musicSource.volume;
+
+        // Плавное уменьшение громкости
+        while (musicSource.volume > minVolume)
+        {
+            musicSource.volume -= Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        // Смена трека
+        currentClip = newClip4;
+        musicSource.clip = currentClip;
+        musicSource.Play();
+
+        // Сохраняем выбор музыки
+        PlayerPrefs.SetString("CurrentMusicClip", currentClip.name);
+        PlayerPrefs.Save();
+
+        // Плавное восстановление громкости
+        while (musicSource.volume < startVolume)
+        {
+            musicSource.volume += Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        isChangingTrack = false;
+    }
+
+
+    private IEnumerator SmoothChangeMusic5()
+    {
+        isChangingTrack = true;
+        float startVolume = musicSource.volume;
+
+        // Плавное уменьшение громкости
+        while (musicSource.volume > minVolume)
+        {
+            musicSource.volume -= Time.deltaTime * volumeChangeSpeed;
+            yield return null;
+        }
+
+        // Смена трека
+        currentClip = newClip5;
         musicSource.clip = currentClip;
         musicSource.Play();
 

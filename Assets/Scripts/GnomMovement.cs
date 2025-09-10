@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class GnomeMovement : MonoBehaviour
 {
@@ -15,12 +16,26 @@ public class GnomeMovement : MonoBehaviour
 
     // Кэшированные значения для оптимизации
     private Transform _transform;
-    private float _fourTimesJumpHeight; // 4f * jumpHeight
-    private float _inverseJumpDuration; // 1f / jumpDuration
+    private float _fourTimesJumpHeight;
+    private float _inverseJumpDuration;
     private const float PI = Mathf.PI;
+
+    // Предварительно вычисленные значения для анимации
+    private float _sideStepValue;
+    private float _tiltDirection;
+    private Vector3 _newPosition;
+
+
+    [Header("Настройки анимации")]
+    public float flySpeed = 5f;     // Скорость полета
+    public float waitBeforeStart = 5f; // Ожидание перед началом движения (секунды)
+    public float waitAtDestination = 1f; // Ожидание в точке назначения (секунды)
+    public float travelDistance = 10f; // Дистанция перемещения
 
     void Start()
     {
+
+
         _transform = transform;
         _startPosition = _transform.localPosition;
         _startRotation = _transform.localRotation;
@@ -30,7 +45,50 @@ public class GnomeMovement : MonoBehaviour
         _inverseJumpDuration = 1f / jumpDuration;
 
         _jumpTimer = Random.Range(0f, jumpDuration);
+
+        // Предварительное вычисление часто используемых значений
+        _newPosition = new Vector3();
     }
+    public void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("12");
+        Debug.Log("123");
+        StartCoroutine(BoxAnimationSequence1());
+
+        StartCoroutine(BoxAnimationSequence());
+
+    }
+
+    IEnumerator BoxAnimationSequence1()
+    {
+
+        // Шаг 2: Перемещение вперед на 10 единиц
+        float journey = 0f;
+        Vector3 targetPosition = _startPosition + Vector3.back * travelDistance;
+
+        while (journey <= 1f)
+        {
+            journey += Time.deltaTime * flySpeed / travelDistance;
+            transform.position = Vector3.Lerp(_startPosition, targetPosition, journey);
+            yield return null;
+        }
+    }
+
+    IEnumerator BoxAnimationSequence()
+    {
+        // Шаг 3: Ожидание
+        yield return new WaitForSeconds(waitBeforeStart);
+        float journey1 = 0f;
+        Vector3 targetPosition1 = _startPosition + Vector3.forward * travelDistance;
+
+        while (journey1 <= 1f)
+        {
+            journey1 += Time.deltaTime * flySpeed / travelDistance;
+            transform.position = Vector3.Lerp(_startPosition, targetPosition1, journey1);
+            yield return null;
+        }
+    }
+
 
     void Update()
     {
@@ -38,13 +96,13 @@ public class GnomeMovement : MonoBehaviour
 
         if (_jumpTimer > jumpDuration)
         {
-            _jumpTimer = 0f;
+            _jumpTimer -= jumpDuration; // Используем вычитание вместо присваивания 0 для сохранения точности
             _isJumpingLeft = !_isJumpingLeft;
         }
 
         float progress = _jumpTimer * _inverseJumpDuration;
 
-        // Применяем трансформации напрямую
+        // Применяем трансформации
         ApplyTransformations(progress);
     }
 
@@ -55,25 +113,25 @@ public class GnomeMovement : MonoBehaviour
         float height = _fourTimesJumpHeight * heightProgress;
 
         // Боковое смещение
-        float sideMovement = Mathf.SmoothStep(0f, 1f, progress);
-        if (!_isJumpingLeft) sideMovement = -sideMovement;
-        float xPos = _startPosition.x + sideMovement * sideStep;
+        float sideMovement = progress * progress * (3f - 2f * progress); // Аппроксимация SmoothStep
+        _sideStepValue = _isJumpingLeft ? sideMovement : -sideMovement;
 
         // Применяем позицию
-        _transform.localPosition = new Vector3(
-            xPos,
+        _newPosition.Set(
+            _startPosition.x + _sideStepValue * sideStep,
             _startPosition.y + height,
             _startPosition.z
         );
+        _transform.localPosition = _newPosition;
 
         // Вычисляем и применяем вращение
         float tiltAmount = Mathf.Sin(progress * PI) * bodyTilt;
-        float tiltDirection = _isJumpingLeft ? 1f : -1f;
+        _tiltDirection = _isJumpingLeft ? 1f : -1f;
 
         _transform.localRotation = Quaternion.Euler(
             _startRotation.eulerAngles.x,
             _startRotation.eulerAngles.y,
-            _startRotation.eulerAngles.z + tiltAmount * tiltDirection
+            _startRotation.eulerAngles.z + tiltAmount * _tiltDirection
         );
     }
 
@@ -87,6 +145,11 @@ public class GnomeMovement : MonoBehaviour
         float fourTimesJumpHeight = 4f * jumpHeight;
 
         // Рисуем возможные траектории прыжков
+        Vector3 leftPos = new Vector3();
+        Vector3 rightPos = new Vector3();
+        Vector3 prevLeftPos = new Vector3();
+        Vector3 prevRightPos = new Vector3();
+
         for (int i = 1; i < 20; i++)
         {
             float progress = i / 20f;
@@ -96,26 +159,26 @@ public class GnomeMovement : MonoBehaviour
             float prevHeight = fourTimesJumpHeight * prevProgress * (1f - prevProgress);
 
             // Влево
-            Vector3 leftPos = new Vector3(
+            leftPos.Set(
                 startPos.x - progress * sideStep,
                 startPos.y + height,
                 startPos.z
             );
 
-            Vector3 prevLeftPos = new Vector3(
+            prevLeftPos.Set(
                 startPos.x - prevProgress * sideStep,
                 startPos.y + prevHeight,
                 startPos.z
             );
 
             // Вправо
-            Vector3 rightPos = new Vector3(
+            rightPos.Set(
                 startPos.x + progress * sideStep,
                 startPos.y + height,
                 startPos.z
             );
 
-            Vector3 prevRightPos = new Vector3(
+            prevRightPos.Set(
                 startPos.x + prevProgress * sideStep,
                 startPos.y + prevHeight,
                 startPos.z

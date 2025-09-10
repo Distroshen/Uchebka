@@ -1,62 +1,48 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] GameObject fadeout;
+
+    // Кэшированные значения для оптимизации
+    private WaitForSeconds waitFor2_8Seconds;
+    private WaitForSeconds waitFor2Seconds;
+    private WaitForSeconds waitFor3Seconds;
+
     void Start()
     {
-    }
-
-    void Update()
-    {
-
+        // Предварительно создаем WaitForSeconds для оптимизации корутин
+        waitFor2_8Seconds = new WaitForSeconds(2.8f);
+        waitFor2Seconds = new WaitForSeconds(2f);
+        waitFor3Seconds = new WaitForSeconds(3f);
     }
 
     public void StartGame()
     {
-        StartCoroutine(START());
-    }
-
-    IEnumerator START()
-    {
-        fadeout.SetActive(true);
-        yield return new WaitForSeconds(2.8f);
-        SceneManager.LoadScene(1);
+        StartCoroutine(LoadSceneWithFade(1, waitFor2_8Seconds));
     }
 
     public void StartShop()
     {
-        StartCoroutine(START1());
+        StartCoroutine(LoadSceneWithFade(2, waitFor2Seconds));
     }
-    IEnumerator START1()
-    {
-        fadeout.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(2);
-    }
-
 
     public void StartRecord()
     {
-        StartCoroutine(START2());
-    }
-    IEnumerator START2()
-    {
-        fadeout.SetActive(true);
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(3);
+        StartCoroutine(LoadSceneWithFade(3, waitFor3Seconds));
     }
 
     public void StartMusic()
     {
-        StartCoroutine(START3());
+        StartCoroutine(LoadSceneWithFade(3, waitFor3Seconds));
     }
-    IEnumerator START3()
+
+    private IEnumerator LoadSceneWithFade(int sceneIndex, WaitForSeconds waitTime)
     {
         fadeout.SetActive(true);
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(3);
+        yield return waitTime;
+        SceneManager.LoadScene(sceneIndex);
     }
 }

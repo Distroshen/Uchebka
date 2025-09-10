@@ -67,7 +67,7 @@ public class BustB : MonoBehaviour
         // Воспроизводим звук взрыва
         if (bombFX != null)
         {
-            bombFX.Play();
+           bombFX.Play();
         }
 
         // Вызываем смерть игрока

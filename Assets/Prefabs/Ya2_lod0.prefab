@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ya2_lod2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: abf1391d803c9da4daedc4ca9329dd6d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -93,15 +97,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 246eec415440609489388a888014427e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.54
+      value: 72.82052
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 246eec415440609489388a888014427e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.016671658
+      value: 26.17112
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 246eec415440609489388a888014427e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.4325423
+      value: -182.93246
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 246eec415440609489388a888014427e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -136,9 +140,29 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 246eec415440609489388a888014427e, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 246eec415440609489388a888014427e, type: 3}
+      propertyPath: m_RayTracingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 246eec415440609489388a888014427e, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 246eec415440609489388a888014427e, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 246eec415440609489388a888014427e, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 246eec415440609489388a888014427e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b5230e6dd54851f469976aff16a4d26c, type: 2}
+      objectReference: {fileID: 2100000, guid: 8ddc313c079c75641b8259dd3a50c3b1, type: 2}
     - target: {fileID: 919132149155446097, guid: 246eec415440609489388a888014427e, type: 3}
       propertyPath: m_Name
       value: Ya2_lod0
@@ -146,6 +170,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 246eec415440609489388a888014427e, type: 3}
       propertyPath: m_TagString
       value: Obstacle
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 246eec415440609489388a888014427e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -194,7 +222,7 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 8414318597923689303}
-  - screenRelativeHeight: 0.00086000003
+  - screenRelativeHeight: 0.00472681
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 1310733116844498308}
@@ -214,7 +242,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -299,6 +327,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a601467ca715fa840b1f1cfd0747273b, type: 3}
       propertyPath: m_Name
       value: Ya2_lod1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a601467ca715fa840b1f1cfd0747273b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

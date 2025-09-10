@@ -151,6 +151,21 @@ public class PurchaseButton : MonoBehaviour
                 // Для тега Song - воспроизводим музыку
                 MusicController.Instance.ChangeMusic2();
                 break;
+
+            case "Son3":
+                // Для тега Song - воспроизводим музыку
+                MusicController.Instance.ChangeMusic3();
+                break;
+
+            case "Song4":
+                // Для тега Song - воспроизводим музыку
+                MusicController.Instance.ChangeMusic4();
+                break;
+
+            case "Song5":
+                // Для тега Song - воспроизводим музыку
+                MusicController.Instance.ChangeMusic5();
+                break;
         }
         UpdateButtonState();
     }

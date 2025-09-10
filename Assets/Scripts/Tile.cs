@@ -341,22 +341,16 @@ void SpawnCoin(GameObject coinPrefab, Vector3 position)
         return transform.position.z + transform.localScale.z / 2f; // По трансформу
     }
 
-    // Обработка столкновения с игроком
-    private void OnTriggerEnter(Collider other)
+    // Обработка триггера игрока
+    public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            HandlePlayerTrigger();
+            BombFX.Play();
+            this.gameObject.SetActive(false);
+            Life = false;
+            FindAnyObjectByType<BustB>().B1();
         }
-    }
-
-    // Обработка триггера игрока
-    private void HandlePlayerTrigger()
-    {
-        BombFX.Play(); // Звук взрыва
-        this.gameObject.SetActive(false); // Деактивация тайла
-        Life = false; // Обновление статуса
-        FindAnyObjectByType<BustB>().B1(); // Вызов метода разрушения
     }
 
     // Сброс шанса усилителей

@@ -13,30 +13,21 @@ public class Player : MonoBehaviour
     private bool isMobilePlatform;
     private bool isTouching = false;
     private float targetXPosition;
-
+    
     [SerializeField] GameObject mainCam;
     [SerializeField] GameObject Fadeout;
     [SerializeField] GameObject Player1;
     [SerializeField] GameObject LosePanel;
     public bool Life = true;
 
-    void Start()
-    {
-        Life = true;
-        // Определяем платформу
-        isMobilePlatform = Application.isMobilePlatform;
+    // Кэшированные компоненты
+    private Transform playerTransform;
+    private Animator playerAnimator;
+    private Animator cameraAnimator;
+    private Scor scoreManager;
+    private Camera mainCamera;
+    private WaitForSeconds waitForSevenSeconds;
 
-        if (isMobilePlatform)
-        {
-            targetXPosition = transform.position.x;
-        }
-
-        isImmortal = false;
-        if (Life == true)
-        {
-            StartCoroutine(SS());
-        }
-    }
     public static Player Instance { get; private set; }
 
     private void Awake()
@@ -49,11 +40,42 @@ public class Player : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // Кэшируем компоненты
+        playerTransform = transform;
+        playerAnimator = Player1.GetComponent<Animator>();
+        cameraAnimator = mainCam.GetComponent<Animator>();
+        scoreManager = FindFirstObjectByType<Scor>();
+        mainCamera = Camera.main;
+
+        // Предварительно создаем WaitForSeconds
+        waitForSevenSeconds = new WaitForSeconds(7f);
     }
+
+    void Start()
+    {
+        Life = true;
+        // Определяем платформу
+        isMobilePlatform = Application.isMobilePlatform;
+
+        if (isMobilePlatform)
+        {
+            targetXPosition = playerTransform.position.x;
+        }
+
+        isImmortal = false;
+        if (Life)
+        {
+            StartCoroutine(SpeedIncreaseRoutine());
+        }
+    }
+
     void FixedUpdate()
     {
+        if (!Life) return;
+
         // Всегда двигаемся вперед
-        transform.Translate(Vector3.forward * Time.deltaTime * Speed, Space.World);
+        playerTransform.Translate(Vector3.forward * Time.deltaTime * Speed, Space.World);
 
         if (isMobilePlatform)
         {
@@ -67,19 +89,22 @@ public class Player : MonoBehaviour
 
     void PCMovement()
     {
+        float horizontalInput = 0f;
+
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            if (transform.position.x > LeftLimit)
-            {
-                transform.Translate(Vector3.left * Time.deltaTime * Speedz, Space.World);
-            }
+            horizontalInput = -1f;
         }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            if (transform.position.x < RightLimit)
-            {
-                transform.Translate(Vector3.right * Time.deltaTime * Speedz, Space.World);
-            }
+            horizontalInput = 1f;
+        }
+
+        if (horizontalInput != 0f)
+        {
+            float newX = playerTransform.position.x + horizontalInput * Time.deltaTime * Speedz;
+            newX = Mathf.Clamp(newX, LeftLimit, RightLimit);
+            playerTransform.position = new Vector3(newX, playerTransform.position.y, playerTransform.position.z);
         }
     }
 
@@ -88,15 +113,15 @@ public class Player : MonoBehaviour
         if (isTouching)
         {
             // Плавное движение к целевой позиции
-            float newX = Mathf.Lerp(transform.position.x, targetXPosition, Time.deltaTime * Speedz);
+            float newX = Mathf.Lerp(playerTransform.position.x, targetXPosition, Time.deltaTime * Speedz);
             newX = Mathf.Clamp(newX, LeftLimit, RightLimit);
-            transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+            playerTransform.position = new Vector3(newX, playerTransform.position.y, playerTransform.position.z);
         }
     }
 
     void Update()
     {
-        if (!isMobilePlatform) return;
+        if (!isMobilePlatform || !Life) return;
 
         // Обработка касаний для мобильных устройств
         if (Input.touchCount > 0)
@@ -106,7 +131,7 @@ public class Player : MonoBehaviour
             if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
             {
                 // Преобразуем позицию касания в мировые координаты
-                Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+                Vector3 touchPosition = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
                 targetXPosition = touchPosition.x;
                 isTouching = true;
             }
@@ -116,42 +141,54 @@ public class Player : MonoBehaviour
             isTouching = false;
         }
     }
-    IEnumerator SS()
+
+    IEnumerator SpeedIncreaseRoutine()
     {
-        yield return new WaitForSeconds(7);
-        if (Speed <= MaxSpeed)
+        while (Speed <= MaxSpeed && Life)
         {
+            yield return waitForSevenSeconds;
+
+            if (!Life) yield break;
+
             Speed += 1;
+
             if (Speed >= Speedz + 6)
             {
                 Speedz += 1;
-            }    
-            StartCoroutine(SS());
+            }
         }
     }
+
     public void BustU()
     {
-        Speed = Speed + 5;
-        Speedz = Speedz + 5;
+        Speed += 5;
+        Speedz += 5;
     }
+
     public void BustU2()
     {
-        Speed = Speed - 5;
-        Speedz = Speedz - 5;
+        Speed -= 5;
+        Speedz -= 5;
     }
+
     public void Dead1()
     {
-        FindAnyObjectByType<Scor>().OnPlayerDeath();
+        if (!Life) return;
+
         Life = false;
+        scoreManager.OnPlayerDeath();
         Speed = 0;
         MaxSpeed = 0;
         Speedz = 0;
-        Player1.GetComponent<Animator>().Play("Death1");
-        mainCam.GetComponent<Animator>().Play("AC");
+
+        //playerAnimator.Play("Death1");
+        cameraAnimator.Play("AC");
+
         Fadeout.SetActive(true);
-        Invoke("LP", 3f);
+        Invoke("ShowLosePanel", 3f);
     }
-    void LP()
+
+    void ShowLosePanel()
     {
         LosePanel.SetActive(true);
     }

@@ -1,48 +1,83 @@
-using System.Collections.Generic;
+п»їusing System.Collections.Generic;
 using UnityEngine;
 
 public class TileGenerator_Back : MonoBehaviour
 {
-    [Header("Основные настройки")]
+    [Header("РћСЃРЅРѕРІРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё")]
     [SerializeField] private GameObject _normalTilePrefab;
     [SerializeField] private GameObject[] _specialTilePrefabs;
     [SerializeField] private int _maxCount = 5;
     [SerializeField] private Transform _tileHolder;
     [SerializeField] private Transform _startPoint;
 
-    [Header("Вероятности")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё РїСѓР»Р° РѕР±СЉРµРєС‚РѕРІ")]
+    [SerializeField] private int _poolSize = 20;
+    [SerializeField] private bool _useObjectPool = true;
+
+    [Header("Р’РµСЂРѕСЏС‚РЅРѕСЃС‚Рё")]
     [Range(0, 100)][SerializeField] private float _specialTileChance = 20f;
 
     private List<Tile> _tiles = new List<Tile>();
-    private float _timer;
-    private bool _isActive = true;
-    private float _nextSpawnZ = 0f; // Текущая позиция для спавна
-    private const float TILE_OFFSET = 10f; // Фиксированное расстояние между тайлами
+    private float _nextSpawnZ = 0f;
+    private const float TILE_OFFSET = 10f;
+
+    // РљСЌС€РёСЂРѕРІР°РЅРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
+    private Vector3 _startPosition;
+    private bool _hasStartPoint;
+    private static readonly Quaternion ROTATION_180 = Quaternion.Euler(0f, 180f, 0f);
+
+    // РџСѓР» РѕР±СЉРµРєС‚РѕРІ
+    private Queue<GameObject> _normalTilePool = new Queue<GameObject>();
+    private Dictionary<GameObject, bool> _isSpecialTile = new Dictionary<GameObject, bool>();
 
     void Start()
     {
-        _nextSpawnZ = _startPoint != null ? _startPoint.position.z : 0f;
+        _hasStartPoint = _startPoint != null;
+        _startPosition = _hasStartPoint ? _startPoint.position : Vector3.zero;
+        _nextSpawnZ = _startPosition.z;
+
+        // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РїСѓР» РѕР±СЉРµРєС‚РѕРІ
+        if (_useObjectPool)
+        {
+            InitializeObjectPool();
+        }
+
         CreateFirstTile();
         GenerateInitialTiles();
+
+        // Р—Р°РїСѓСЃРєР°РµРј РєРѕСЂСѓС‚РёРЅСѓ РґР»СЏ РїСЂРѕРІРµСЂРєРё РІРјРµСЃС‚Рѕ Update
+        StartCoroutine(CheckTilesCoroutine());
     }
 
-    void Update()
+    private void InitializeObjectPool()
     {
-        if (!_isActive) return;
-
-        _timer += Time.deltaTime;
-
-        if (_tiles.Count < _maxCount)
+        for (int i = 0; i < _poolSize; i++)
         {
-            GenerateTile();
+            GameObject tile = Instantiate(_normalTilePrefab, _tileHolder);
+            tile.SetActive(false);
+            _normalTilePool.Enqueue(tile);
+            _isSpecialTile[tile] = false;
+        }
+    }
+
+    private System.Collections.IEnumerator CheckTilesCoroutine()
+    {
+        var waitForSeconds = new WaitForSeconds(0.5f);
+
+        while (true)
+        {
+            if (_tiles.Count < _maxCount)
+            {
+                GenerateTile();
+            }
+            yield return waitForSeconds;
         }
     }
 
     private void CreateFirstTile()
     {
-        Vector3 startPos = _startPoint != null ? _startPoint.position : Vector3.zero;
-        CreateTile(_normalTilePrefab, startPos, false);
-        _nextSpawnZ += TILE_OFFSET; // Увеличиваем позицию для следующего тайла
+        CreateTile(_normalTilePrefab, _startPosition, false);
+        _nextSpawnZ += TILE_OFFSET;
     }
 
     private void GenerateInitialTiles()
@@ -56,14 +91,12 @@ public class TileGenerator_Back : MonoBehaviour
 
     private void GenerateTile()
     {
-        if (_tiles.Count == 0)
-        {
-            CreateFirstTile();
-            return;
-        }
-
         GameObject prefabToUse = GetRandomTilePrefab(out bool isRotatable);
-        Vector3 spawnPosition = CalculateSpawnPosition();
+        Vector3 spawnPosition = new Vector3(
+            _startPosition.x,
+            _startPosition.y,
+            _nextSpawnZ
+        );
 
         CreateTile(prefabToUse, spawnPosition, isRotatable);
     }
@@ -71,36 +104,39 @@ public class TileGenerator_Back : MonoBehaviour
     private GameObject GetRandomTilePrefab(out bool isRotatable)
     {
         isRotatable = false;
-        bool isSpecial = Random.Range(0f, 100f) <= _specialTileChance;
 
-        if (isSpecial && _specialTilePrefabs.Length > 0)
+        if (_specialTilePrefabs.Length > 0 &&
+            Random.Range(0f, 100f) <= _specialTileChance)
         {
-            int randomIndex = Random.Range(0, _specialTilePrefabs.Length);
-            GameObject specialPrefab = _specialTilePrefabs[randomIndex];
-            isRotatable = specialPrefab.CompareTag("Поворот");
+            GameObject specialPrefab = _specialTilePrefabs[Random.Range(0, _specialTilePrefabs.Length)];
+            isRotatable = specialPrefab.CompareTag("РџРѕРІРѕСЂРѕС‚");
             return specialPrefab;
         }
 
         return _normalTilePrefab;
     }
 
-    private Vector3 CalculateSpawnPosition()
-    {
-        return new Vector3(
-            _startPoint.position.x,
-            _startPoint.position.y,
-            _nextSpawnZ
-        );
-    }
-
     private void CreateTile(GameObject prefab, Vector3 position, bool isRotatable)
     {
-        GameObject newTileObj = Instantiate(prefab, position, Quaternion.identity, _tileHolder);
+        GameObject newTileObj;
+        bool isSpecial = prefab != _normalTilePrefab;
 
-        if (isRotatable && Random.Range(0, 2) == 1)
+        // РСЃРїРѕР»СЊР·СѓРµРј РїСѓР» РѕР±СЉРµРєС‚РѕРІ РґР»СЏ РѕР±С‹С‡РЅС‹С… С‚Р°Р№Р»РѕРІ
+        if (!isSpecial && _useObjectPool && _normalTilePool.Count > 0)
         {
-            newTileObj.transform.Rotate(0f, 180f, 0f);
+            newTileObj = _normalTilePool.Dequeue();
+            newTileObj.transform.position = position;
+            newTileObj.transform.rotation = isRotatable && Random.Range(0, 2) == 1 ? ROTATION_180 : Quaternion.identity;
+            newTileObj.SetActive(true);
         }
+        else
+        {
+            // Р”Р»СЏ СЃРїРµС†РёР°Р»СЊРЅС‹С… С‚Р°Р№Р»РѕРІ РёР»Рё РµСЃР»Рё РїСѓР» РїСѓСЃС‚ СЃРѕР·РґР°РµРј РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚
+            Quaternion rotation = isRotatable && Random.Range(0, 2) == 1 ? ROTATION_180 : Quaternion.identity;
+            newTileObj = Instantiate(prefab, position, rotation, _tileHolder);
+        }
+
+        _isSpecialTile[newTileObj] = isSpecial;
 
         if (newTileObj.TryGetComponent(out Tile newTile))
         {
@@ -108,25 +144,12 @@ public class TileGenerator_Back : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Отсутствует компонент Tile!", newTileObj);
-            Destroy(newTileObj);
+            Debug.LogError("РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РєРѕРјРїРѕРЅРµРЅС‚ Tile!", newTileObj);
+            DestroyOrReturnToPool(newTileObj, isSpecial);
+            return;
         }
 
-        _nextSpawnZ += TILE_OFFSET; // Увеличиваем позицию для следующего тайла
-    }
-
-    private Tile GetLastValidTile()
-    {
-        if (_tiles.Count == 0) return null;
-
-        // Ищем последнюю валидную плитку с конца
-        for (int i = _tiles.Count - 1; i >= 0; i--)
-        {
-            if (_tiles[i] != null) return _tiles[i];
-            _tiles.RemoveAt(i);
-        }
-
-        return null;
+        _nextSpawnZ += TILE_OFFSET;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -134,7 +157,56 @@ public class TileGenerator_Back : MonoBehaviour
         if (other.TryGetComponent(out Tile tile) && _tiles.Contains(tile))
         {
             _tiles.Remove(tile);
-            Destroy(tile.gameObject);
+            DestroyOrReturnToPool(tile.gameObject, _isSpecialTile.ContainsKey(tile.gameObject) && _isSpecialTile[tile.gameObject]);
+
+            // РќРµРјРµРґР»РµРЅРЅРѕ РїСЂРѕРІРµСЂСЏРµРјжЇеђ¦йњЂи¦Ѓ СЃРѕР·РґР°С‚СЊ РЅРѕРІС‹Р№ С‚Р°Р№Р»
+            if (_tiles.Count < _maxCount)
+            {
+                GenerateTile();
+            }
         }
+    }
+
+    private void DestroyOrReturnToPool(GameObject tileObject, bool isSpecial)
+    {
+        if (!isSpecial && _useObjectPool)
+        {
+            // Р’РѕР·РІСЂР°С‰Р°РµРј РІ РїСѓР»
+            tileObject.SetActive(false);
+            _normalTilePool.Enqueue(tileObject);
+        }
+        else
+        {
+            // РЈРЅРёС‡С‚РѕР¶Р°РµРј СЃРїРµС†РёР°Р»СЊРЅС‹Рµ С‚Р°Р№Р»С‹
+            Destroy(tileObject);
+
+            // РЈРґР°Р»СЏРµРј РёР· СЃР»РѕРІР°СЂСЏ РµСЃР»Рё СЌС‚Рѕ СЃРїРµС†РёР°Р»СЊРЅС‹Р№ С‚Р°Р№Р»
+            if (_isSpecialTile.ContainsKey(tileObject))
+            {
+                _isSpecialTile.Remove(tileObject);
+            }
+        }
+    }
+
+    // РњРµС‚РѕРґ РґР»СЏ РѕС‡РёСЃС‚РєРё РїСѓР»Р° РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
+    public void ClearPool()
+    {
+        while (_normalTilePool.Count > 0)
+        {
+            GameObject tile = _normalTilePool.Dequeue();
+            if (tile != null)
+            {
+                Destroy(tile);
+            }
+        }
+        _normalTilePool.Clear();
+        _isSpecialTile.Clear();
+    }
+
+    // РњРµС‚РѕРґ РґР»СЏ РїРµСЂРµР·Р°РїРѕР»РЅРµРЅРёСЏ РїСѓР»Р°
+    public void RefillPool()
+    {
+        ClearPool();
+        InitializeObjectPool();
     }
 }

@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 3213968455552164555}
   - component: {fileID: 893902953109284285}
   - component: {fileID: 2957250865145697203}
+  - component: {fileID: 9169323306472352319}
   m_Layer: 0
   m_Name: NormalTile
   m_TagString: NormalTile
@@ -205,6 +206,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.0813813, y: 0.31334114, z: 6.176526}
   m_Center: {x: 0.14567304, y: -0.14, z: 0}
+--- !u!205 &9169323306472352319
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4006711871713362718}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.0071162237
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 3213968455552164555}
+  m_Enabled: 1
 --- !u!1 &5968316674033766926
 GameObject:
   m_ObjectHideFlags: 0

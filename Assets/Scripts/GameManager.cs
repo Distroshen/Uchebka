@@ -9,6 +9,20 @@ public class GameManager : MonoBehaviour
     {
         Coin = PlayerPrefs.GetInt("Coins", 0);
     }
+
+    public static GameManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void AddCoin()
     {
         PlayerPrefs.SetInt("Coins", Coin);

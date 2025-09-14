@@ -16,7 +16,6 @@ public class Player : MonoBehaviour
     
     [SerializeField] GameObject mainCam;
     [SerializeField] GameObject Fadeout;
-    [SerializeField] GameObject Player1;
     [SerializeField] GameObject LosePanel;
     public bool Life = true;
 
@@ -43,7 +42,6 @@ public class Player : MonoBehaviour
 
         // Кэшируем компоненты
         playerTransform = transform;
-        playerAnimator = Player1.GetComponent<Animator>();
         cameraAnimator = mainCam.GetComponent<Animator>();
         scoreManager = FindFirstObjectByType<Scor>();
         mainCamera = Camera.main;
@@ -182,7 +180,7 @@ public class Player : MonoBehaviour
         Speedz = 0;
 
         //playerAnimator.Play("Death1");
-        cameraAnimator.Play("AC");
+        //cameraAnimator.Play("AC");
 
         Fadeout.SetActive(true);
         Invoke("ShowLosePanel", 3f);
